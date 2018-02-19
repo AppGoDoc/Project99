@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">AppGo!</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="appgo">AppGo!</string>
+    <string name="appgo_email">appgo.website@gmail.com</string>
+    <string name="map_type">Tipo_de_mapa</string>
+    <string name="string_login">LOGIN</string>
+    <string name="string_esqueci_minha_senha"><u>Esqueceu sua senha?</u></string>
+    <string name="cadastrese">cadastre-se!</string>
+    <string name="logo_image">logo_image</string>
+    <string name="login">LOGIN</string>
+    <string name="name">Nome</string>
+    <string name="email">e-mail</string>
+    <string name="celular">celular</string>
+    <string name="empresa">empresa</string>
+    <string name="ramo_atividade">Qual a sua atividade?</string>
+    <string name="endereco">Endereço do anúncio</string>
+    <string name="salvar">Salvar Cadastro</string>
+    <string name="frase_inicial">Tudo que você quer, precisa ou deseja, você encontra no AppGo!</string>
+    <string name="MAP_LOCATION_CLASS">maplocation.class</string>
+    <!--Ação ligada ao valor de Latitude-->
+    <string name="LOCATION_LATITUDE">locationupdatelatitude</string>
+    <string name="LATITUDE">latitudevalue</string>
+    <!--Ação ligada ao valor de Longitude-->
+    <string name="LOCATION_LONGITUDE">locationupdatelongitude</string>
+    <string name="LONGITUDE">longitudevalue</string>
+    <string name="msg_buscar">Buscar...</string>
+    <string name="endereconaoencontrado">Não foi possível encontrar o endereço solicitado, tente novamente.</string>
+
+    <string-array name="service_types">
+        <item>Administração Pública</item>
+        <item>Alimentação</item>
+        <item>Atividades imobiliárias</item>
+        <item>Auto Escolas e Despachantes</item>
+        <item>Bancos</item>
+        <item>Clubes, Esportes e Lazer</item>
+        <item>Comércio e Aluguel de Veículos</item>
+        <item>Consertos emergenciais</item>
+        <item>Construção e Reforma</item>
+        <item>Correio e Cartórios</item>
+        <item>Educação e Cultura</item>
+        <item>Empregos e Oportunidades</item>
+        <item>Escritórios</item>
+        <item>Estabelecimentos Comerciais</item>
+        <item>Fábricas e Fornecedores</item>
+        <item>Farmácias e Drogarias</item>
+        <item>Hospitais e Clínicas</item>
+        <item>Hotéis</item>
+        <item>Igrejas</item>
+        <item>Lojas de Varejos</item>
+        <item>Moda Feminina e Beleza</item>
+        <item>Moda Masculina e Beleza</item>
+        <item>Papelarias</item>
+        <item>Pessoal</item>
+        <item>Postos de combustível e Serviços</item>
+        <item>Prestadores de Serviços</item>
+        <item>Saúde e Bem Estar</item>
+        <item>Segurança Pública</item>
+        <item>Serviço de Aplicativo</item>
+        <item>Serviço Taxí</item>
+        <item>Serviços diversos para veículos</item>
+        <item>Shows, Festas e Eventos</item>
+        <item>Socorro</item>
+        <item>Supermercados e Hipermercados</item>
+        <item>Transportes</item>
+        <item>Turismo e Viagens</item>
+        <item>Veterinários e PetShops</item>
+    </string-array>
+    <string name="title_activity_search_on_map">MapSearch</string>
+    <string name="endereco_anunciante">Localização do Anúncio</string>
+    <string name="cpf">CPF (Sem pontos ou traços)</string>
+    <string name="digiteseuemail">Digite seu e-mail</string>
+    <string name="redefinicaodesenha">Redefinição de senha</string>
+    <string name="enviaremail">Enviar e-mail</string>
+    <string name="envieumemail">Envie um e-mail para redefinir a sua senha.</string>
+    <string name="confirmeemail">Confirme seu e-mail</string>
+    <string name="digitesuasenha">Digite sua senha(Pelo menos 6 dígitos)</string>
+    <string name="confirmesuasenha">Confirme sua senha</string>
+    <string name="dadospessoais">Dados pessoais</string>
+    <string name="ramo">Ramo de atividade</string>
+    <string name="alterarsenha">Alterar Senha</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="salv">Salvar</string>
+    <string name="meu_cadastro">Meu Cadastro</string>
+    <string name="definir_local">Minha Localização</string>
+    <string name="meus_dados">Meus Dados</string>
+    <string name="anuncio_premium">Anúncio Premium</string>
+    <string name="sair">Sair</string>
+    <string name="alterarmarcador">Se for preciso, clique segure e arraste o marcador para ajustar sua localização</string>
+    <string name="facebook_app_id">214875735742767</string>
+    <string name="fb_login_protocol_scheme">fb214875735742767</string>
+    <string name="cpf_text">CPF</string>
+
+</resources>

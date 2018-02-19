@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/filtrar"
+            android:icon="@drawable/ic_magnifier"
+            android:title="Filtrar Busca" />
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Compartilhe" />
+        <item
+            android:id="@+id/config"
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="Configuração" />
+    </group>
+
+    <item android:title="Seja Anunciante">
+        <menu>
+            <item
+                android:id="@+id/advertiser"
+                android:icon="@drawable/ic_dollar_coin_on_hand"
+                android:title="Anunciante" />
+            <item
+                android:id="@+id/advertiser_tutorial"
+                android:icon="@drawable/ic_question_mark"
+                android:title="Tutorial" />
+
+        </menu>
+    </item>
+
+</menu>
