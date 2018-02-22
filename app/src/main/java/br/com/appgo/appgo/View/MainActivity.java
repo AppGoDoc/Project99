@@ -24,7 +24,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,8 +38,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.appgo.appgo.Controller.MapLocation;
 import br.com.appgo.appgo.Controller.SPreferences;
-import br.com.appgo.appgo.Fragment.ForgetPasswd;
-import br.com.appgo.appgo.Fragment.UserOptions;
+import br.com.appgo.appgo.Fragment.ConfirmLogout;
+import br.com.appgo.appgo.Fragment.FragmentUserData;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.LocationService;
 
@@ -50,9 +49,11 @@ public class MainActivity extends AppCompatActivity
 
     private static final int REQUEST_ERRO_PLAY_SERVICES = 1;
     private static final String TAG_FRAGMENT = "UserOptionFragment";
+    private static final String TAG_FRAGMENT_LOGOUT = "DialogFragmentConfirmLogout";
     public static final String LOCATION_RESOURCES = "location.resources";
     public static final String LATITUDE_LOCATION = "latitude";
     public static final String LONGITUDE_LOCATION = "longitude";
+    private static final String TAG_FRAGMENT_USERDATA = "fragment_dialog_userdata";
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         //Calling Maps components
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
-
     }
 
 
@@ -107,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -147,22 +147,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
-            case R.id.advertiser:
+            case R.id.user_login:
                 Log.d("     +++     ", "on button anunciante");
                 FirebaseUser user = mAuth.getCurrentUser();
                 Log.d("     +++     ", "on button anunciante");
                 if (user != null) {
                     // User is signed in
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-                    if (fragment != null)
-                        fragmentTransaction.remove(fragment);
-                    fragmentTransaction.addToBackStack(TAG_FRAGMENT);
-                    DialogFragment dialogFragment = new UserOptions();
-                    dialogFragment.show(fragmentTransaction, TAG_FRAGMENT);
-//                    Intent intent = new Intent(getApplicationContext(), AnuncianteDados.class);
-//                    startActivity(intent);
-//                    Log.d("     ---->    ", "onAuthStateChanged:signed_in:" + user.getUid());
+                    DialogFragment dialogFragment = new FragmentUserData();
+                    dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
+
                 } else {
                     preferences.setLocalizacaoType(null);
                     Intent it = new Intent(getApplicationContext(), LoginActivity.class);
@@ -172,13 +165,25 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.advertiser_tutorial:
                 break;
+            case R.id.criar_loja:
+                if (mUser == null){
+
+                } else {
+                    Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
+                    startActivity(criarLojaIntent);
+                }
+                break;
             case R.id.filtrar:
                 break;
             case R.id.share:
                 break;
+            case R.id.sair:
+                if (mAuth.getCurrentUser() != null){
+                    DialogFragment dialogFragment = new ConfirmLogout();
+                    dialogFragment.show(dialogCall(TAG_FRAGMENT_LOGOUT), TAG_FRAGMENT_LOGOUT);
+                }
+                break;
         }
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -281,8 +286,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void userLoged(){
-
+    public FragmentTransaction dialogCall(String Tag){
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        Fragment fragment = getFragmentManager().findFragmentByTag(Tag);
+        if (fragment != null)
+            fragmentTransaction.remove(fragment);
+        fragmentTransaction.addToBackStack(Tag);
+        return fragmentTransaction;
     }
-
 }

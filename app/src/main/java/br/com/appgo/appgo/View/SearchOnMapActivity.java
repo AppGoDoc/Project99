@@ -41,10 +41,8 @@ import java.util.List;
 import br.com.appgo.appgo.Controller.MapLocation;
 import br.com.appgo.appgo.Fragment.AdressNotFind;
 import br.com.appgo.appgo.Fragment.ConfirmLocationFragment;
-import br.com.appgo.appgo.Fragment.ForgetPasswd;
 import br.com.appgo.appgo.Model.Local;
 import br.com.appgo.appgo.Model.User;
-import br.com.appgo.appgo.Persistence.FireBase;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.FindAddress;
 

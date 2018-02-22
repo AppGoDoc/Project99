@@ -92,5 +92,13 @@
     <string name="facebook_app_id">214875735742767</string>
     <string name="fb_login_protocol_scheme">fb214875735742767</string>
     <string name="cpf_text">CPF</string>
+    <string name="content_description_userphoto">userphoto</string>
+    <string name="confirm_logout">Deseja realizar Logout?</string>
+    <string name="crie_seu_anuncio">Crie seu anúncio</string>
+    <string name="cnpj">CNPJ</string>
+    <string name="buscar_endereco">Buscar endereço</string>
+    <string name="whatssapp_number">Whatsapp (Telefone)</string>
+    <string name="telefone_comercial">Telefone Comercial</string>
+    <string name="email_comercial">e-mail (Comercial)</string>
 
 </resources>

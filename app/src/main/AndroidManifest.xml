@@ -66,14 +66,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.RegisterActivity"
-            android:label="Cadastro"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.INSERT_OR_EDIT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".View.SearchOnMapActivity"
             android:label="@string/title_activity_search_on_map"
             android:screenOrientation="portrait"></activity>
@@ -92,11 +84,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".View.AnuncianteDados"
-            android:label="@string/meu_cadastro"
+        <activity android:name=".View.CriarAnuncioActivity"
+            android:label="Crie seu Anúncio"
             android:screenOrientation="portrait">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
 
 

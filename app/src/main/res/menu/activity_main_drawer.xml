@@ -21,13 +21,21 @@
     <item android:title="Seja Anunciante">
         <menu>
             <item
-                android:id="@+id/advertiser"
-                android:icon="@drawable/ic_dollar_coin_on_hand"
-                android:title="Anunciante" />
+                android:id="@+id/user_login"
+                android:icon="@drawable/ic_user"
+                android:title="Login" />
+            <item
+                android:id="@+id/criar_loja"
+                android:icon="@drawable/ic_user"
+                android:title="Criar Anúncio" />
             <item
                 android:id="@+id/advertiser_tutorial"
                 android:icon="@drawable/ic_question_mark"
                 android:title="Tutorial" />
+            <item
+                android:id="@+id/sair"
+                android:icon="@drawable/ic_user"
+                android:title="Sair" />
 
         </menu>
     </item>

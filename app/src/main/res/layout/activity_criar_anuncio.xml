@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/image_icone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/shop_icon" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_nome_anuncio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_icone">
+
+            <EditText
+                android:id="@+id/nome_anuncio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Digite um nome para seu anúncio" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/radiogrup_escolhadocumento"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cont_nome_anuncio">
+
+            <RadioButton
+                android:id="@+id/cpf_enable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/cpf_text" />
+
+            <RadioButton
+                android:id="@+id/cnpj_enable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/cnpj" />
+
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_numero_documento"
+            android:layout_width="202dp"
+            android:layout_height="52dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/radiogrup_escolhadocumento"
+            app:layout_constraintTop_toBottomOf="@+id/cont_nome_anuncio">
+
+            <EditText
+                android:id="@+id/documento_anuncio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Documento" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/image_location"
+            android:layout_width="82dp"
+            android:layout_height="84dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/location_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radiogrup_escolhadocumento" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_adress_name"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_location"
+            app:layout_constraintTop_toTopOf="@id/image_location">
+
+            <EditText
+                android:id="@+id/adress_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/endereco" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/button4"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="39dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/buscar_endereco"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cont_adress_name" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_whattsapp"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/image_whatsapp"
+            app:layout_constraintTop_toBottomOf="@id/image_location">
+
+            <EditText
+                android:id="@+id/whatsapp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/whatssapp_number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/image_whatsapp"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/whatsapp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/cont_whattsapp"
+            app:layout_constraintTop_toTopOf="@id/cont_whattsapp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_telefone"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/image_telefone"
+            app:layout_constraintTop_toBottomOf="@id/image_whatsapp">
+
+            <EditText
+                android:id="@+id/telefone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/telefone_comercial" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/image_telefone"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/telefone"
+            app:layout_constraintRight_toLeftOf="@id/cont_telefone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cont_telefone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/cont_email_comercial"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/image_email"
+            app:layout_constraintTop_toBottomOf="@id/image_telefone">
+
+            <EditText
+                android:id="@+id/email_comercial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/email_comercial" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/image_email"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/email"
+            app:layout_constraintRight_toLeftOf="@id/cont_email_comercial"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cont_email_comercial" />
+
+        <Button
+            android:id="@+id/btn_ramo"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="321dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:shadowColor="@color/colorAccent"
+            android:text="@string/ramo_atividade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/image_maleta"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cont_email_comercial" />
+
+        <ImageView
+            android:id="@+id/image_maleta"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/maleta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_ramo" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
