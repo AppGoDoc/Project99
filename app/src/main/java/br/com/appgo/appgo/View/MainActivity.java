@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
                     dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
 
                 } else {
-                    preferences.setLocalizacaoType(null);
+                    preferences.setAtividade(null);
                     Intent it = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(it);
                     Log.d("     ---->    ", "onAuthStateChanged:signed_out");

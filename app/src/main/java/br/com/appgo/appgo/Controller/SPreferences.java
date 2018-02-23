@@ -12,18 +12,19 @@ import com.google.android.gms.maps.GoogleMap;
 public class SPreferences {
     Context context;
     String SP_MAP_TYPE = "map_mode_type" ;
-    String SP_LOCALIZACAO = "qual_sua_atividade";
+    String SP_ATIVIDADE = "qual_sua_atividade";
     SharedPreferences mapType;
-    SharedPreferences localizacaoType;
+    SharedPreferences atividadeType;
     public SPreferences(Context context){
         this.context = context;
         mapType = context.getSharedPreferences(SP_MAP_TYPE, Context.MODE_PRIVATE);
-        localizacaoType = context.getSharedPreferences(SP_LOCALIZACAO, Context.MODE_PRIVATE);
+        atividadeType = context.getSharedPreferences(SP_ATIVIDADE, Context.MODE_PRIVATE);
+
     }
 
-    public void setLocalizacaoType(String atividade){
-        SharedPreferences.Editor editor = localizacaoType.edit();
-        editor.putString(SP_LOCALIZACAO, atividade);
+    public void setAtividade(String atividade){
+        SharedPreferences.Editor editor = atividadeType.edit();
+        editor.putString(SP_ATIVIDADE, atividade);
         editor.commit();
     }
 
@@ -36,7 +37,7 @@ public class SPreferences {
         return mapType.getInt(SP_MAP_TYPE, GoogleMap.MAP_TYPE_NONE);
     }
 
-    public String getLocalizacao(){
-        return localizacaoType.getString(SP_LOCALIZACAO, "Qual a sua atividade?");
+    public String getAtividade(){
+        return atividadeType.getString(SP_ATIVIDADE, "Qual a sua atividade?");
     }
 }
