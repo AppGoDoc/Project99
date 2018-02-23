@@ -46,6 +46,7 @@ import br.com.appgo.appgo.Model.User;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.FindAddress;
 
+import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_NAME;
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
 
@@ -140,6 +141,33 @@ public class SearchOnMapActivity extends FragmentActivity
                 userReference.child("/local").setValue(local);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        String adress = intent.getStringExtra(ADRESS_NAME);
+        Toast.makeText(this, "---> " + adress, Toast.LENGTH_SHORT).show();
+        if (marker != null) {
+            marker.remove();
+        }
+        if (!adress.isEmpty()) {
+            addressList = findAddress.getmFindAddress(adress);
+            if (addressList.isEmpty()) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+                if (fragment != null)
+                    fragmentTransaction.remove(fragment);
+                fragmentTransaction.addToBackStack(TAG_FRAGMENT);
+                DialogFragment dialogFragment = new AdressNotFind();
+                dialogFragment.show(fragmentTransaction, TAG_FRAGMENT);
+            } else {
+                AddressShowList(addressList);
+                ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            }
+        }
     }
 
     private void showProgress(Boolean token) {

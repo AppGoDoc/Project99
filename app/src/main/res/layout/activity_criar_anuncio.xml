@@ -84,7 +84,8 @@
                 android:id="@+id/documento_anuncio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Documento" />
+                android:hint="@string/documento"
+                android:inputType="numberSigned"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -118,7 +119,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btn_find_address"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="39dp"

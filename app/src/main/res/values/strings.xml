@@ -100,5 +100,6 @@
     <string name="whatssapp_number">Whatsapp (Telefone)</string>
     <string name="telefone_comercial">Telefone Comercial</string>
     <string name="email_comercial">e-mail (Comercial)</string>
+    <string name="documento">Documento</string>
 
 </resources>
