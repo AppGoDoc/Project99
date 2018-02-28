@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
+import java.util.Locale;
 
 public class FindAddress {
     Context mContext;
@@ -17,7 +18,8 @@ public class FindAddress {
 
     public FindAddress(Context context) {
         this.mContext = context;
-        geocoder = new Geocoder(context);
+        geocoder = new Geocoder(context, Locale.getDefault());
+        mFindAddress = null;
     }
 
     public List<Address> getmFindAddress(String localAddress){

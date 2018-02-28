@@ -101,5 +101,13 @@
     <string name="telefone_comercial">Telefone Comercial</string>
     <string name="email_comercial">e-mail (Comercial)</string>
     <string name="documento">Documento</string>
+    <string name="deseja_alterar_endereco">Alterar o nome do endereço?</string>
+    <string name="observacao_endereco">Acrescentar referência ao endereço</string>
+    <string name="salvarendereco">Salvar Endereço</string>
+    <string name="escolha_seu_icone">Escolha seu icone (Clique no logo))</string>
+    <string name="clique_lojinha">Clique na lojinha e escolha seu icone</string>
+    <string name="todo">TODO</string>
+    <string name="escolha_fotos_anuncio">Escolha fotos para seu anúncio!</string>
+    <string name="salvar_anuncio">Salvar Anúncio</string>
 
 </resources>

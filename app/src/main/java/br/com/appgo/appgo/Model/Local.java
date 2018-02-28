@@ -11,9 +11,6 @@ public class Local {
     public String enderecoObservacao;
     public double latitude;
     public double longitude;
-//    public Local(double latitude, double longitude){
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//    }
+
     public Local(){}
 }

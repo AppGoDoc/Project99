@@ -56,19 +56,25 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.LocationService" />
+        <service
+            android:name=".Services.LocationService" />
+
         <activity
             android:name=".View.LoginActivity"
             android:label="LOGIN"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".View.SearchOnMapActivity"
             android:label="@string/title_activity_search_on_map"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

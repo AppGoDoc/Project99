@@ -1,5 +1,6 @@
 package br.com.appgo.appgo.View;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -31,22 +32,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.List;
 import br.com.appgo.appgo.Controller.MapLocation;
 import br.com.appgo.appgo.Fragment.AdressNotFind;
 import br.com.appgo.appgo.Fragment.ConfirmLocationFragment;
-import br.com.appgo.appgo.Model.Local;
 import br.com.appgo.appgo.Model.User;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.FindAddress;
 
+import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_LATITUDE;
+import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_LONGITUDE;
 import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_NAME;
+import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_OBS;
+import static br.com.appgo.appgo.View.CriarAnuncioActivity.RESULT_FIND_ADDRESS;
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
 
@@ -59,7 +59,7 @@ public class SearchOnMapActivity extends FragmentActivity
     private MapLocation mapLocation;
     private GoogleApiClient mGoogleApiClient;
     private ProgressBar progressBar;
-    private EditText editText;
+    private EditText addressName, addressObs;
     private ImageButton button;
     private FindAddress findAddress;
     private List<Address> addressList = null;
@@ -77,7 +77,8 @@ public class SearchOnMapActivity extends FragmentActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        editText = (EditText) findViewById(R.id.edtTextAdress);
+        addressName = (EditText) findViewById(R.id.edtTextAdress);
+        addressObs = (EditText) findViewById(R.id.edtTextAdressObs);
         button = (ImageButton) findViewById(R.id.button2);
         buttonConfirm = (FloatingActionButton)findViewById(R.id.float_button_confirm);
         buttonConfirm.setEnabled(false);
@@ -88,46 +89,13 @@ public class SearchOnMapActivity extends FragmentActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         mapLocation = new MapLocation(getApplicationContext(), googleMap, mGoogleApiClient);
         findAddress = new FindAddress(this);
-
-        userReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (marker != null){
-                    marker.remove();
-                }
-                String stringAddress = editText.getText().toString();
-                if (!stringAddress.isEmpty()) {
-                    addressList = findAddress.getmFindAddress(stringAddress);
-                    if (addressList.isEmpty()){
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-                        if (fragment != null)
-                            fragmentTransaction.remove(fragment);
-                        fragmentTransaction.addToBackStack(TAG_FRAGMENT);
-                        DialogFragment dialogFragment = new AdressNotFind();
-                        dialogFragment.show(fragmentTransaction, TAG_FRAGMENT);
-                    } else {
-                        AddressShowList(addressList);
-                        ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE))
-                                .hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                    }
-                }
+                MudaMeuNome(addressName.getText().toString());
             }
         });
 
@@ -135,45 +103,16 @@ public class SearchOnMapActivity extends FragmentActivity
             @Override
             public void onClick(View v) {
                 LatLng latLng = marker.getPosition();
-                Local local = new Local();
-                local.latitude = latLng.latitude;
-                local.longitude = latLng.longitude;
-                userReference.child("/local").setValue(local);
+                Intent intent = new Intent();
+                intent.putExtra(ADRESS_LATITUDE, latLng.latitude);
+                intent.putExtra(ADRESS_LONGITUDE, latLng.longitude);
+                intent.putExtra(ADRESS_NAME, addressName.getText().toString());
+                intent.putExtra(ADRESS_OBS, addressObs.getText().toString());
+                setResult(RESULT_FIND_ADDRESS, intent);
+                finish();
             }
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = getIntent();
-        String adress = intent.getStringExtra(ADRESS_NAME);
-        Toast.makeText(this, "---> " + adress, Toast.LENGTH_SHORT).show();
-        if (marker != null) {
-            marker.remove();
-        }
-        if (!adress.isEmpty()) {
-            addressList = findAddress.getmFindAddress(adress);
-            if (addressList.isEmpty()) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-                if (fragment != null)
-                    fragmentTransaction.remove(fragment);
-                fragmentTransaction.addToBackStack(TAG_FRAGMENT);
-                DialogFragment dialogFragment = new AdressNotFind();
-                dialogFragment.show(fragmentTransaction, TAG_FRAGMENT);
-            } else {
-                AddressShowList(addressList);
-                ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE))
-                        .hideSoftInputFromWindow(editText.getWindowToken(), 0);
-            }
-        }
-    }
-
-    private void showProgress(Boolean token) {
-        progressBar.setVisibility(token ? View.VISIBLE : View.GONE);
-    }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -185,6 +124,15 @@ public class SearchOnMapActivity extends FragmentActivity
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mapLocation.atualizarMapa(googleMap);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Intent intent = getIntent();
+        String nameAdress = intent.getStringExtra(ADRESS_NAME).toString();
+        addressName.setText(nameAdress);
+        MudaMeuNome(nameAdress);
     }
 
     @Override
@@ -228,11 +176,11 @@ public class SearchOnMapActivity extends FragmentActivity
                         addresses.get(item).getLongitude());
                 googleMap.animateCamera(newLatLngZoom(lng,17.0f));
                 marker = googleMap.addMarker(new MarkerOptions()
-                                  .icon(BitmapDescriptorFactory.defaultMarker())
-                                  .position(lng)
-                                  .draggable(true));
-                }
-            });
+                        .icon(BitmapDescriptorFactory.defaultMarker())
+                        .position(lng)
+                        .draggable(true));
+            }
+        });
         AlertDialog alert = builder.create();
         alert.show();
         buttonConfirm.setEnabled(true);
@@ -262,5 +210,26 @@ public class SearchOnMapActivity extends FragmentActivity
     @Override
     public void onMarkerDragEnd(Marker marker) {
 
+    }
+    public void MudaMeuNome(String addressText){
+        if (marker != null){
+            marker.remove();
+        }
+        if (!addressText.isEmpty()) {
+            addressList = findAddress.getmFindAddress(addressText);
+            if (addressList.isEmpty()){
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+                if (fragment != null)
+                    fragmentTransaction.remove(fragment);
+                fragmentTransaction.addToBackStack(TAG_FRAGMENT);
+                DialogFragment dialogFragment = new AdressNotFind();
+                dialogFragment.show(fragmentTransaction, TAG_FRAGMENT);
+            } else {
+                AddressShowList(addressList);
+                ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(addressName.getWindowToken(), 0);
+            }
+        }
     }
 }

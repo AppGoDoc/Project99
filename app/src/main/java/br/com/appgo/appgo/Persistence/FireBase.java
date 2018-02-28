@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import br.com.appgo.appgo.Model.Local;
+import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.Model.User;
 
 /**
@@ -15,7 +16,7 @@ import br.com.appgo.appgo.Model.User;
  */
 
 public class FireBase {
-    private static String ANUNCIANTES = "Anunciantes";
+    private static String ANUNCIO = "Anuncios";
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference userData;
@@ -24,7 +25,7 @@ public class FireBase {
         this.database = database;
         userData = database.getReference();
     }
-    public void AddUser(User user){
-        userData.child(ANUNCIANTES).child(mAuth.getUid()).setValue(user);
+    public void AddAnuncio(Loja loja){
+        userData.child(ANUNCIO).child(mAuth.getUid()).setValue(loja);
     }
 }

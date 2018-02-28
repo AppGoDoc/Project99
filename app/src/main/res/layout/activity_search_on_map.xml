@@ -26,16 +26,36 @@
         android:layout_height="55dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_carregando"
+        android:hint="@string/endereco"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/edtTextAdressObs"
         app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.018" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edtTextAdressObs"
+        android:layout_width="275dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_carregando"
+        android:hint="@string/observacao_endereco"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edtTextAdress"
+        app:layout_constraintTop_toBottomOf="@id/edtTextAdress" />
 
     <ImageButton
         android:id="@+id/button2"
@@ -80,7 +100,7 @@
         app:layout_constraintHorizontal_bias="0.912"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.616"
+        app:layout_constraintVertical_bias="0.66999996"
         app:srcCompat="@drawable/fui_done_check_mark" />
 
 </android.support.constraint.ConstraintLayout>
