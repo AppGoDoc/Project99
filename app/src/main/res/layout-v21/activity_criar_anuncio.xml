@@ -6,11 +6,12 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:padding="10dp">
 
@@ -38,16 +39,20 @@
 
         <ImageView
             android:id="@+id/image_icone"
-            android:layout_width="100dp"
-            android:layout_height="96dp"
+            android:layout_width="107dp"
+            android:layout_height="94dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/todo"
             android:translationZ="6dp"
             app:layout_constraintBottom_toBottomOf="@+id/image_map_google"
+            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/shop_icon" />
+            app:layout_constraintVertical_bias="0.475"
+            app:srcCompat="@drawable/shop_icon"
+            tools:targetApi="lollipop" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/cont_nome_anuncio"
@@ -116,9 +121,10 @@
 
         <ImageView
             android:id="@+id/image_location"
-            android:layout_width="54dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="36dp"
+            android:padding="3dp"
             android:src="@drawable/location_image"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radiogrup_escolhadocumento" />
@@ -126,19 +132,18 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/cont_adress_name"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_location"
-            app:layout_constraintTop_toTopOf="@id/image_location">
+            app:layout_constraintTop_toBottomOf="@+id/radiogrup_escolhadocumento">
 
             <EditText
                 android:id="@+id/adress_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/endereco" />
 
         </android.support.design.widget.TextInputLayout>
@@ -148,6 +153,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="39dp"
+            android:layout_marginTop="4dp"
             android:text="@string/buscar_endereco"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cont_adress_name" />
@@ -156,7 +162,7 @@
             android:id="@+id/cont_whattsapp"
             android:layout_width="0dp"
             android:layout_height="52dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="46dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/image_whatsapp"
             app:layout_constraintTop_toBottomOf="@id/image_location">
@@ -263,11 +269,29 @@
             android:layout_height="203dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:translationZ="5dp"
+            android:translationZ="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/mapa_google_image" />
+
+        <TextView
+            android:id="@+id/txt_anuncio_fotos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_style"
+            android:padding="5dp"
+            android:text="@string/escolha_fotos_anuncio"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_ramo" />
 
         <!--Fotos1 do anuncio-->
         <ImageView
@@ -275,34 +299,36 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/btn_ramo"
+            android:src="@drawable/ic_tools"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/txt_anuncio_fotos" />
         <!--Fotos2 do anuncio-->
         <ImageView
             android:id="@+id/foto2"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
+            android:src="@drawable/ic_tools"
             app:layout_constraintTop_toBottomOf="@id/foto1"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
         <!--Fotos3 do anuncio-->
         <ImageView
             android:id="@+id/foto3"
-            android:layout_width="match_parent"
+            android:layout_width="361dp"
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/foto2"
+            android:src="@drawable/ic_tools"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/foto2" />
+
         <Button
             android:id="@+id/btn_salvar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
             android:layout_marginTop="42dp"
             android:background="@drawable/button_style"
             android:paddingEnd="24dp"
@@ -316,6 +342,17 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/foto3" />
+        <ProgressBar
+            android:id="@+id/progress_bar_upload"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="336dp"
+            android:layout_height="344dp"
+            android:layout_marginBottom="42dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

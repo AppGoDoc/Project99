@@ -9,19 +9,34 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import br.com.appgo.appgo.Controller.CheckDigit;
 import br.com.appgo.appgo.Controller.ResizePhoto;
@@ -39,7 +54,9 @@ import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
 
 public class CriarAnuncioActivity extends AppCompatActivity implements View.OnClickListener,
         DialogFragmentListRamo.ChooseRamoDialogListener {
+
     private static final String FRAGMENT_RAMO_ATIVIDADE = "fragment_ramo_atividade";
+    public static final String ANUNCIOS = "Anuncios";
     public static final int RESULT_FIND_ADDRESS = 70;
     public static final int RESULT_ICONE = 22;
     public static final int RESULT_FOTO_1 = 10;
@@ -54,21 +71,26 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
     private Button btnRamo, btnFindAddress, btnSalvar;
     private RadioGroup docChoose;
     private EditText nomeAnuncio, documento, whatsapp, telefone, email, addressName;
+    private ProgressBar progressBar;
     SPreferences preferences;
     MaskEditTextChangedListener maskWhats, maskTel;
     Bitmap bitmapIcone, bitmapFoto1, bitmapFoto2, bitmapFoto3;
-    Loja loja = null;
-    Local local = null;
+    Loja loja;
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    StorageReference reference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_anuncio);
 
+        reference = firebaseStorage.getReference();
         loja = new Loja();
         preferences = new SPreferences(getApplicationContext());
         buttonLoadIco = (ImageView) findViewById(R.id.image_icone);
         buttonLoadIco.setOnClickListener(this);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar_upload);
+        progressBar.setVisibility(View.GONE);
         mFoto1 = (ImageView) findViewById(R.id.foto1);
         mFoto1.setOnClickListener(this);
         mFoto2 = (ImageView) findViewById(R.id.foto2);
@@ -86,6 +108,7 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         btnSalvar.setOnClickListener(this);
         whatsapp = (EditText)findViewById(R.id.whatsapp);
         maskWhats = new MaskEditTextChangedListener("(##)####-#####", whatsapp);
+
         telefone = (EditText)findViewById(R.id.telefone);
         maskTel = new MaskEditTextChangedListener("(##)####-#####", telefone);
         email = (EditText) findViewById(R.id.email_comercial);
@@ -142,9 +165,11 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 //Salva Anuncio Criado ou Edita.
                 if (CriarLoja()){
                     FirebaseAuth auth = FirebaseAuth.getInstance();
-                    DatabaseReference database = FirebaseDatabase.getInstance().getReference("Anuncios/");
-                    database.setValue(loja);
-                    Toast.makeText(this, " " + loja.local.endereco, Toast.LENGTH_SHORT).show();
+                    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                    if (bitmapIcone != null)
+                    UploadPhoto(bitmapIcone, "icone carregado com sucesso", auth, "icone.jpg");
+
+                    database.child(ANUNCIOS).child(auth.getUid()).setValue(loja);
                 }
                 break;
         }
@@ -152,19 +177,21 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
             case RESULT_ICONE:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri targetUri = data.getData();
                     try {
                         Bitmap bitMoldura = BitmapFactory.decodeResource(
                                 getApplicationContext().getResources(),
                                 R.drawable.marker_appgo);
                         bitmapIcone = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                        ResizePhoto resizePhoto = new ResizePhoto(bitmapIcone.getWidth(), bitmapIcone.getHeight(), 112);
-                        bitmapIcone = Bitmap.createScaledBitmap(bitmapIcone,resizePhoto.widhtResize(),
+                        ResizePhoto resizePhoto = new ResizePhoto(bitmapIcone.getWidth(), bitmapIcone.getHeight(), 96);
+                        bitmapIcone = Bitmap.createScaledBitmap(bitmapIcone, resizePhoto.widhtResize(),
                                 resizePhoto.widhtResize(), true);
-                        buttonLoadIco.setImageBitmap(combineImages(bitmapIcone, bitMoldura));
+                        bitmapIcone = combineImages(bitmapIcone, bitMoldura);
+                        buttonLoadIco.setImageBitmap(bitmapIcone);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -172,49 +199,48 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case RESULT_FOTO_1:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri targetUriFoto1 = data.getData();
-                    try{
+                    try {
                         bitmapFoto1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto1));
                         mFoto1.setImageBitmap(bitmapFoto1);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 break;
             case RESULT_FOTO_2:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri targetUriFoto2 = data.getData();
                     try {
                         bitmapFoto2 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto2));
                         mFoto2.setImageBitmap(bitmapFoto2);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 break;
             case RESULT_FOTO_3:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri targetUriFoto3 = data.getData();
                     try {
                         bitmapFoto3 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto3));
                         mFoto3.setImageBitmap(bitmapFoto3);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 break;
-            case RESULT_FIND_ADDRESS:
-                if (resultCode == RESULT_OK){
-                    loja.local.endereco = data.getStringExtra(ADRESS_NAME);
-                    loja.local.enderecoObservacao = data.getStringExtra(ADRESS_OBS);
-                    loja.local.latitude = data.getDoubleExtra(ADRESS_LATITUDE, 0);
-                    loja.local.longitude = data.getDoubleExtra(ADRESS_LONGITUDE, 0);
-                    addressName.setText(local.endereco);
-                }
-                break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_FIND_ADDRESS){
+            Local tmpLocal = new Local(data.getStringExtra(ADRESS_NAME),
+                                    data.getStringExtra(ADRESS_OBS),
+                                    data.getDoubleExtra(ADRESS_LATITUDE, 1),
+                                    data.getDoubleExtra(ADRESS_LONGITUDE, 0));
+            loja.local = tmpLocal;
+            addressName.setText(loja.local.latitude + " ");
+        }
+
     }
     public FragmentTransaction dialogCall(String Tag){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -237,13 +263,12 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         Bitmap cs = Bitmap.createBitmap(bitmap2.getWidth(), bitmap2.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas comboImage = new Canvas(cs);
         comboImage.drawBitmap(bit1, 0.0f, 0.0f, null);
-        comboImage.drawBitmap(bitmap1, 17.2f, 12.5f, null);
+        comboImage.drawBitmap(bitmap1, 15.0f, 12.5f, null);
         return cs;
     }
 
     private boolean CriarLoja(){
         boolean token = true;
-        loja = new Loja();
         String message = "ATENÇÂO!!!\n";
         CheckDigit checkDigit = new CheckDigit();
         //Pegando o nome do Anuncio
@@ -298,7 +323,6 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         }
         //Grava Anuncio Na Base de Dados;
         if (token){
-            loja.local = local;
             loja.emailAnuncio = email.getText().toString();
             if (btnRamo.getText().toString() != "Qual a sua atividade?"){
                 loja.ramo = btnRamo.getText().toString();
@@ -310,6 +334,31 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
         return token;
+    }
+    public void UploadPhoto(Bitmap bitmap, final String message, FirebaseAuth auth, String fileName){
+        progressBar.setVisibility(View.VISIBLE);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] dataByte = stream.toByteArray();
+
+        StorageReference referenceIcone = reference.child(auth.getUid()).child("fotos").child(fileName);
+        UploadTask uploadTask = referenceIcone.putBytes(dataByte);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(CriarAnuncioActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
 }

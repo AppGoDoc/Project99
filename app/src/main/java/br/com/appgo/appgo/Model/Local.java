@@ -12,5 +12,12 @@ public class Local {
     public double latitude;
     public double longitude;
 
-    public Local(){}
+    public Local(){ }
+
+    public Local(String endereco, String enderecoObservacao, double latitude, double longitude) {
+        this.endereco = endereco;
+        this.enderecoObservacao = enderecoObservacao;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
