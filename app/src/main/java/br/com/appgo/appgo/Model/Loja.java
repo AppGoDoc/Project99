@@ -5,11 +5,14 @@ package br.com.appgo.appgo.Model;
  */
 
 public class Loja {
-    public String userId, titulo, cpf, cnpj, whatsapp, telefone, emailAnuncio,
-    ramo, urlIcone, urlFoto1, urlFoto2, urlFoto3;
+    public String userId, titulo, whatsapp, telefone, emailAnuncio, ramo, urlIcone, urlFoto1,
+            urlFoto2, urlFoto3;
     public Local local;
+    public Documento documento;
 
     public Loja(){
         local = new Local();
+        documento = new Documento();
+
     }
 }
