@@ -1,5 +1,7 @@
 package br.com.appgo.appgo.Controller;
 
+import android.graphics.Bitmap;
+
 import com.google.zxing.client.result.ParsedResult;
 
 import static java.lang.Double.valueOf;
@@ -22,5 +24,10 @@ public class ResizePhoto {
     public int heightSize(){
         int result = (int)(height/(widht/resize));
         return result;
+    }
+    public Bitmap resizeBitmap(Bitmap bitmap){
+        bitmap = Bitmap.createScaledBitmap(bitmap, widhtResize(),
+                heightSize(), true);
+        return bitmap;
     }
 }

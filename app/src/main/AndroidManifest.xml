@@ -56,8 +56,8 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".Services.LocationService" />
+        <service android:name=".Services.LocationService" />
+        <service android:name=".Services.LoadAnunciosData"/>
 
         <activity
             android:name=".View.LoginActivity"
