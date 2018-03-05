@@ -4,16 +4,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-
 import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.View.CriarAnuncioActivity;
 
@@ -37,7 +33,6 @@ public class LoadAnunciosData extends Service {
     public final static String LOJA_TIPO_DOCUMENTO = "tipo_documento_loja";
     public final static String LOJA_DOCUMENTO = "documento_loja";
     public static final String RECEIVER_DATA_ANUNCIO = "receive_data_anuncio";
-//    public static final String RECEIVER_DATA_FOTOS = "receiver_data_fotos";
     private Loja loja = new Loja();
     FirebaseAuth auth = FirebaseAuth.getInstance();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference(CriarAnuncioActivity.ANUNCIOS).child(auth.getUid());
@@ -50,7 +45,6 @@ public class LoadAnunciosData extends Service {
         public void onDataChange(DataSnapshot dataSnapshot) {
             loja = dataSnapshot.getValue(Loja.class);
             DataReceive(loja);
-//            DataReceiveFotos(loja);
         }
 
         @Override

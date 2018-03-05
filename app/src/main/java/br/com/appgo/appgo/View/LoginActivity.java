@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "Facebook: Error: ");
+                Log.d(TAG, "Facebook: Error: " + error.getMessage());
             }
         });
     }
@@ -106,8 +106,7 @@ public class LoginActivity extends AppCompatActivity{
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, TAG_LOGIN_FAIL,
-                                    Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });

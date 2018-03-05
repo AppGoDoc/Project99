@@ -27,24 +27,12 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.lang.ref.Reference;
-
+import java.io.Serializable;
 import br.com.appgo.appgo.Controller.CheckDigit;
 import br.com.appgo.appgo.Controller.CombineImages;
 import br.com.appgo.appgo.Controller.PhotoPicasso;
@@ -57,6 +45,15 @@ import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.LoadAnunciosData;
 import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_DOCUMENTO;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_EMAIL;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_ENDERECO;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_LOCAL;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_NOME;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_RAMO;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_TELEFONE;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_TIPO_DOCUMENTO;
+import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_WHATSAPP;
 import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_DOCUMENTO;
 import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_EMAIL;
 import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_ENDERECO;
@@ -414,7 +411,6 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 whatsapp.setText(intent.getStringExtra(LOJA_WHATSAPP));
                 telefone.setText(intent.getStringExtra(LOJA_TELEFONE));
                 email.setText(intent.getStringExtra(LOJA_EMAIL));
-
                 String url_icone = intent.getStringExtra(LOJA_ICONE_URL);
                 String url_foto1 = intent.getStringExtra(LOJA_FOTO1_URL);
                 String url_foto2 = intent.getStringExtra(LOJA_FOTO2_URL);
@@ -438,5 +434,37 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ANUNCIO_NOME, nomeAnuncio.getText().toString());
+        outState.putString(ANUNCIO_DOCUMENTO, documento.getText().toString());
+        outState.putString(ANUNCIO_TIPO_DOCUMENTO, docType);
+        outState.putString(ANUNCIO_WHATSAPP, whatsapp.getText().toString());
+        outState.putString(ANUNCIO_TELEFONE, telefone.getText().toString());
+        outState.putString(ANUNCIO_EMAIL, email.getText().toString());
+        outState.putString(ANUNCIO_ENDERECO, addressName.getText().toString());
+        outState.putString(ANUNCIO_RAMO, btnRamo.getText().toString());
+        outState.putSerializable(ANUNCIO_LOCAL, (Serializable) loja.local);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        nomeAnuncio.setText(savedInstanceState.getString(ANUNCIO_NOME));
+        documento.setText(savedInstanceState.getString(ANUNCIO_DOCUMENTO));
+        String tipoDocumento = savedInstanceState.getString(ANUNCIO_TIPO_DOCUMENTO);
+        if (tipoDocumento.equals("CPF"))
+            radioCPF.setChecked(true);
+        if (tipoDocumento.equals("CNPJ"))
+            radioCNPJ.setChecked(true);
+        loja.local = (Local) savedInstanceState.getSerializable(ANUNCIO_LOCAL);
+        addressName.setText(savedInstanceState.getString(ANUNCIO_ENDERECO));
+        whatsapp.setText(savedInstanceState.getString(ANUNCIO_WHATSAPP));
+        telefone.setText(savedInstanceState.getString(ANUNCIO_TELEFONE));
+        btnRamo.setText(savedInstanceState.getString(ANUNCIO_RAMO));
+        email.setText(savedInstanceState.getString(ANUNCIO_EMAIL));
     }
 }

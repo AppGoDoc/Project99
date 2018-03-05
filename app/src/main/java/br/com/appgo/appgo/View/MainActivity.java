@@ -3,6 +3,7 @@ package br.com.appgo.appgo.View;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.AsyncTaskLoader;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +11,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -21,9 +28,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,16 +41,43 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import br.com.appgo.appgo.CallBack.MarkerCallBack;
 import br.com.appgo.appgo.Controller.MapLocation;
+import br.com.appgo.appgo.Controller.PhotoPicasso;
 import br.com.appgo.appgo.Controller.SPreferences;
 import br.com.appgo.appgo.Fragment.ConfirmLogout;
 import br.com.appgo.appgo.Fragment.FragmentUserData;
+import br.com.appgo.appgo.Model.ListLoja;
+import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.R;
+import br.com.appgo.appgo.Services.LoadMarkers;
 import br.com.appgo.appgo.Services.LocationService;
+
+import static br.com.appgo.appgo.Constants.StringConstans.ACTION_RECEIVE_MARKER;
+import static br.com.appgo.appgo.Constants.StringConstans.LOJAS_LIST_RECEIVE;
+import static br.com.appgo.appgo.Services.LoadMarkers.LOJAS_LIST_BUNDLE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
@@ -58,11 +94,12 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
     private SPreferences preferences;
-    private IntentFilter intentFilter;
-    private Intent serviceIntent;
+    private IntentFilter intentFilter, intentFilterMarker;
+    private Intent serviceIntent, serviceIntentMarker;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser mUser = mAuth.getCurrentUser();
     FirebaseAuth.AuthStateListener mAuthListener;
+    ListLoja listLoja;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +129,15 @@ public class MainActivity extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
 
+        intentFilterMarker = new IntentFilter();
+        intentFilterMarker.addAction(ACTION_RECEIVE_MARKER);
+        serviceIntentMarker = new Intent(this, LoadMarkers.class);
+
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
+
+        listLoja = null;
     }
 
 
@@ -241,6 +284,8 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         unregisterReceiver(mReceiver);
         stopService(serviceIntent);
+        unregisterReceiver(mBroadcastReceiver);
+        stopService(serviceIntentMarker);
     }
 
     @Override
@@ -248,20 +293,56 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         startService(serviceIntent);
         registerReceiver(mReceiver, intentFilter);
+        startService(serviceIntentMarker);
+        registerReceiver(mBroadcastReceiver, intentFilterMarker);
     }
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        double latitude = 0f;
-        double longitude = 0f;
-        if (intent.getAction() == LOCATION_RESOURCES){
-            latitude = (Double) intent.getDoubleExtra(LATITUDE_LOCATION, 0);
-            longitude = (Double) intent.getDoubleExtra(LONGITUDE_LOCATION, 0);
-            LatLng latLng = new LatLng(latitude, longitude);
-            mapLocation.setMyLocationMarke(googleMap,latLng);
+            double latitude = 0f;
+            double longitude = 0f;
+            if (intent.getAction() == LOCATION_RESOURCES){
+                latitude = (Double) intent.getDoubleExtra(LATITUDE_LOCATION, 0);
+                longitude = (Double) intent.getDoubleExtra(LONGITUDE_LOCATION, 0);
+                LatLng latLng = new LatLng(latitude, longitude);
+                mapLocation.setMyLocationMarke(googleMap,latLng);
+                }
+        }
+    };
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction() == ACTION_RECEIVE_MARKER){
+                ListLoja listLoja = new ListLoja();
+                byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
+                listLoja = SerializationUtils.deserialize(data);
+                CreateMarkers(listLoja);
             }
         }
     };
+
+    private void CreateMarkers(ListLoja listLoja) {
+        Marker marker = null;
+        Bitmap bitmap = null;
+        for (Loja loja: listLoja.lojas){
+            LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
+
+            marker = googleMap.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .icon(BitmapDescriptorFactory.defaultMarker())
+                                .title(loja.titulo)
+                                .snippet(loja.local.endereco));
+            SetImageIcon(loja.urlIcone, marker, bitmap);
+        }
+    }
+
+    private void SetImageIcon(String urlIcone, final Marker marker, Bitmap bitmap) {
+        ImageView imageView = new ImageView(this);
+        Picasso.with(this)
+                .load(urlIcone)
+                .into(imageView, new MarkerCallBack(marker, urlIcone, imageView, this));
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

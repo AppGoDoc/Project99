@@ -2,11 +2,13 @@ package br.com.appgo.appgo.Model;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * Created by hex on 09/02/18.
  */
 
-public class Local {
+public class Local implements Serializable{
     public String endereco;
     public String enderecoObservacao;
     public double latitude;
