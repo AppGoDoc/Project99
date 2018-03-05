@@ -57,7 +57,7 @@
         </activity>
 
         <service android:name=".Services.LocationService" />
-        <service android:name=".Services.LoadAnunciosData"/>
+        <service android:name=".Services.LoadAnunciosData" />
 
         <activity
             android:name=".View.LoginActivity"
@@ -94,7 +94,8 @@
             android:label="Crie seu Anúncio"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+
             </intent-filter>
         </activity>
 

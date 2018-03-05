@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.View.CriarAnuncioActivity;
