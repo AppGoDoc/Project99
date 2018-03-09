@@ -1,22 +1,28 @@
-package br.com.appgo.appgo.Controller;
+package br.com.appgo.appgo.Persistence;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
 import br.com.appgo.appgo.R;
 
 /**
@@ -25,8 +31,7 @@ import br.com.appgo.appgo.R;
 
 public class PhotoPicasso {
     Context context;
-    private Bitmap bitmap = null;
-
+    Bitmap bitmap = null;
     public PhotoPicasso(Context context){this.context = context;}
 
     public void PhotoOrigSize(String url, final ImageView imageView, boolean token) {
@@ -96,24 +101,37 @@ public class PhotoPicasso {
             });
         }
     }
-    public void PhotoDownload(String url){
+    public void PhotoMarkerDownload(String url, final Marker marker){
         StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
         try {
-            final File file = File.createTempFile("icone","png");
+            final File file = File.createTempFile("icone",".png");
             reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void setBitmap(Bitmap bitmap){
-        this.bitmap = bitmap;
-    }
-    public Bitmap getBitmap(){
-        return bitmap;
+    public void Photo24x24(String url, final Marker marker, boolean token) {
+        if (token) {
+            StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+            storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    ImageView imageView = new ImageView(context);
+                    Picasso.with(context)
+                            .load(uri.toString())
+                            .placeholder(R.drawable.ic_bar)
+                            .error(R.drawable.error_image)
+                            .resize(24, 24)
+                            .centerCrop()
+                            .into(imageView);
+                }
+            });
+        }
     }
 }

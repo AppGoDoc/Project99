@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,20 +46,18 @@ public class LoadMarkers extends Service implements Serializable{
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            ArrayList<Loja> lojas = new ArrayList<Loja>();
-            for (DataSnapshot listaSnapshot : dataSnapshot.getChildren()){
-                Loja loja = listaSnapshot.getValue(Loja.class);
-                lojas.add(loja);
-            }
             ListLoja listLoja = new ListLoja();
-            listLoja.lojas = lojas;
-            Log.d("CREATE MARKER", lojas.get(0).titulo + " <-");
+            int i = 0;
+            for (DataSnapshot listaSnapshot : dataSnapshot.getChildren()){
+                listLoja.lojas.add(listaSnapshot.getValue(Loja.class));
+            }
             SendLojas(listLoja);
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            Log.d("CREATE MARKER", "FALHA");
+            Toast.makeText(getApplicationContext(), "Falha ao carregar dados do servidor.\n",
+                    Toast.LENGTH_SHORT).show();
         }
     }
     private void SendLojas(ListLoja listLoja){
@@ -77,7 +76,6 @@ public class LoadMarkers extends Service implements Serializable{
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("CREATE MARKER", "OnCreate Service Marker");
         LoadMarkers.ReceiveData receiveData = new ReceiveData();
         reference.addValueEventListener(receiveData);
     }

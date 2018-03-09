@@ -239,7 +239,7 @@
             android:src="@drawable/email"
             app:layout_constraintRight_toLeftOf="@id/cont_email_comercial"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/cont_email_comercial" />
+            app:layout_constraintTop_toTopOf="@id/cont_email_comercial" android:contentDescription="TODO"/>
 
         <Button
             android:id="@+id/btn_ramo"
@@ -337,7 +337,7 @@
             android:paddingStart="24dp"
             android:text="@string/salvar_anuncio"
             android:textColor="@color/white"
-            android:textSize="24dp"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -388,7 +388,7 @@
             app:layout_constraintEnd_toEndOf="@id/image_map_google"
             app:layout_constraintLeft_toLeftOf="@id/image_map_google"
             app:layout_constraintRight_toRightOf="@id/image_map_google"
-            app:layout_constraintStart_toStartOf="@id/image_map_google" />
+            app:layout_constraintStart_toStartOf="@id/image_map_google" tools:targetApi="lollipop"/>
 
     </android.support.constraint.ConstraintLayout>
 

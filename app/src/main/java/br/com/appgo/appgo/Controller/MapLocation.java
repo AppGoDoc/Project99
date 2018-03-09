@@ -4,14 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -20,13 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.internal.zzq;
 import com.google.android.gms.tasks.OnSuccessListener;
-import java.io.Serializable;
-import br.com.appgo.appgo.Model.TesteMarker;
+
 import br.com.appgo.appgo.R;
 
-import static com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition;
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
 public class MapLocation{
@@ -63,7 +58,6 @@ public class MapLocation{
     }
     public void atualizarMapa(GoogleMap googleMap){
         googleMap.animateCamera(newLatLngZoom(latLng,17.0f));
-        googleMap.clear();
         marker = googleMap.addMarker(new MarkerOptions()
                                             .position(latLng)
                                             .title("Minha Posição")
@@ -73,13 +67,11 @@ public class MapLocation{
                 .zoom(17)
                 .bearing(90)
                 .build();
-        TesteMarker testeMarker = new TesteMarker(googleMap);
-        testeMarker.testeMarks();
+
     }
     public void setMyLocationMarke(GoogleMap googleMap, LatLng latLng){
         marker.setPosition(latLng);
-        googleMap.animateCamera(newLatLngZoom(latLng,17.0f));
-        Log.e("Minha lOcalizacao", "foi alterada");
+        googleMap.animateCamera(newLatLngZoom(latLng,18.0f));
         }
 
     public FusedLocationProviderClient getmFusedLocationClient() {
@@ -122,7 +114,7 @@ public class MapLocation{
         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(area, 50));
     }
     public void setAnimateCameraMapZoom(GoogleMap googleMap, LatLng latLng){
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
     }
     public void MapClear(GoogleMap googleMap){
         googleMap.clear();

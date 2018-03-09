@@ -1,7 +1,10 @@
 package br.com.appgo.appgo.Model;
 
+import com.google.android.gms.maps.model.Marker;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,5 +14,7 @@ import java.util.List;
 public class ListLoja implements Serializable {
     public List<Loja> lojas;
 
-    public ListLoja() { }
+    public ListLoja() {
+        lojas = new ArrayList<Loja>();
+    }
 }

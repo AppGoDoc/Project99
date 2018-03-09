@@ -2,6 +2,8 @@ package br.com.appgo.appgo.Model;
 
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.Marker;
+
 import java.io.Serializable;
 
 /**

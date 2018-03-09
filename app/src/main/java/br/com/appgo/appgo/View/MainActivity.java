@@ -3,7 +3,6 @@ package br.com.appgo.appgo.View;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.AsyncTaskLoader;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,25 +10,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -45,27 +38,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.apache.commons.lang3.SerializationUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 import java.util.List;
 
-import br.com.appgo.appgo.CallBack.MarkerCallBack;
 import br.com.appgo.appgo.Controller.MapLocation;
-import br.com.appgo.appgo.Controller.PhotoPicasso;
+import br.com.appgo.appgo.Persistence.PhotoPicasso;
 import br.com.appgo.appgo.Controller.SPreferences;
 import br.com.appgo.appgo.Fragment.ConfirmLogout;
 import br.com.appgo.appgo.Fragment.FragmentUserData;
@@ -77,11 +59,11 @@ import br.com.appgo.appgo.Services.LocationService;
 
 import static br.com.appgo.appgo.Constants.StringConstans.ACTION_RECEIVE_MARKER;
 import static br.com.appgo.appgo.Constants.StringConstans.LOJAS_LIST_RECEIVE;
-import static br.com.appgo.appgo.Services.LoadMarkers.LOJAS_LIST_BUNDLE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, ServiceConnection {
+        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, ServiceConnection,
+        GoogleMap.OnMarkerClickListener{
 
     private static final int REQUEST_ERRO_PLAY_SERVICES = 1;
     private static final String TAG_FRAGMENT = "UserOptionFragment";
@@ -93,13 +75,15 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
+    private FloatingActionButton floatingActionButton;
     private SPreferences preferences;
     private IntentFilter intentFilter, intentFilterMarker;
     private Intent serviceIntent, serviceIntentMarker;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser mUser = mAuth.getCurrentUser();
     FirebaseAuth.AuthStateListener mAuthListener;
-    ListLoja listLoja;
+    ListLoja listLoja = null;
+    List<Marker> myMarker = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         //Shared Preferences archive to save configs
         preferences = new SPreferences(getApplicationContext());
 
+        floatingActionButton = findViewById(R.id.floatteste);
         //Calling the view components.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -128,18 +113,14 @@ public class MainActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         intentFilterMarker = new IntentFilter();
         intentFilterMarker.addAction(ACTION_RECEIVE_MARKER);
         serviceIntentMarker = new Intent(this, LoadMarkers.class);
-
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
-
-        listLoja = null;
+        CreateMarkers(listLoja);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -149,7 +130,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
@@ -191,19 +171,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.user_login:
-                Log.d("     +++     ", "on button anunciante");
+                //Log.d("     +++     ", "on button anunciante");
                 FirebaseUser user = mAuth.getCurrentUser();
-                Log.d("     +++     ", "on button anunciante");
+                //Log.d("     +++     ", "on button anunciante");
                 if (user != null) {
                     // User is signed in
                     DialogFragment dialogFragment = new FragmentUserData();
                     dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
-
                 } else {
                     preferences.setAtividade(null);
                     Intent it = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(it);
-                    Log.d("     ---->    ", "onAuthStateChanged:signed_out");
                 }
                 break;
             case R.id.advertiser_tutorial:
@@ -263,12 +241,14 @@ public class MainActivity extends AppCompatActivity
         mapLocation.GoogleMapOptionsSettings(googleMap, preferences.getMapType());
         mapLocation.getLastLocation(googleMap);
         this.googleMap = googleMap;
+        CreateMarkers(listLoja);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        CreateMarkers(listLoja);
     }
 
     @Override
@@ -295,6 +275,7 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(mReceiver, intentFilter);
         startService(serviceIntentMarker);
         registerReceiver(mBroadcastReceiver, intentFilterMarker);
+        CreateMarkers(listLoja);
     }
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -314,7 +295,6 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction() == ACTION_RECEIVE_MARKER){
-                ListLoja listLoja = new ListLoja();
                 byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
                 listLoja = SerializationUtils.deserialize(data);
                 CreateMarkers(listLoja);
@@ -323,25 +303,26 @@ public class MainActivity extends AppCompatActivity
     };
 
     private void CreateMarkers(ListLoja listLoja) {
-        Marker marker = null;
-        Bitmap bitmap = null;
-        for (Loja loja: listLoja.lojas){
-            LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
-
-            marker = googleMap.addMarker(new MarkerOptions()
+        if (listLoja != null){
+            PhotoPicasso photoPicasso = new PhotoPicasso(this);
+            Bitmap bitmap = null;
+            for (Loja loja: listLoja.lojas){
+                LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
+                ImageView imageView = new ImageView(this);
+                photoPicasso.Photo24x24(loja.urlIcone, imageView, true);
+                myMarker.add(
+                        googleMap.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .icon(BitmapDescriptorFactory.defaultMarker())
                                 .title(loja.titulo)
-                                .snippet(loja.local.endereco));
-            SetImageIcon(loja.urlIcone, marker, bitmap);
+                                .snippet(loja.local.endereco))
+                );
+            }
+            for (int i = 0; i <= listLoja.lojas.size()-1; i++){
+                photoPicasso.PhotoMarkerDownload(listLoja.lojas.get(i).urlIcone, myMarker.get(i));
+            }
+            googleMap.setOnMarkerClickListener(this);
         }
-    }
-
-    private void SetImageIcon(String urlIcone, final Marker marker, Bitmap bitmap) {
-        ImageView imageView = new ImageView(this);
-        Picasso.with(this)
-                .load(urlIcone)
-                .into(imageView, new MarkerCallBack(marker, urlIcone, imageView, this));
     }
 
     @Override
@@ -367,6 +348,18 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("listlojas", listLoja);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        savedInstanceState.getSerializable("listlojas");
+    }
+
     public FragmentTransaction dialogCall(String Tag){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         Fragment fragment = getFragmentManager().findFragmentByTag(Tag);
@@ -374,5 +367,18 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.remove(fragment);
         fragmentTransaction.addToBackStack(Tag);
         return fragmentTransaction;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        LatLng latLng = marker.getPosition();
+        for (Loja loja: listLoja.lojas){
+            if (loja.local.latitude == latLng.latitude &&
+                    loja.local.longitude == latLng.longitude){
+                Toast.makeText(this, "Whatsapp: " + loja.whatsapp +"\n" +
+                                "email:   " + loja.emailAnuncio, Toast.LENGTH_SHORT).show();
+            }
+        }
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package br.com.appgo.appgo.Controller;
+package br.com.appgo.appgo.Persistence;
 
 import android.content.Context;
 import android.graphics.Bitmap;
