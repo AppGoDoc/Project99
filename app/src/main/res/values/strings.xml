@@ -109,5 +109,7 @@
     <string name="todo">TODO</string>
     <string name="escolha_fotos_anuncio">Escolha fotos para seu anúncio!</string>
     <string name="salvar_anuncio">Salvar Anúncio</string>
+    <string name="ver_anuncio">VER ANÚNCIO</string>
+    <string name="_0">0</string>
 
 </resources>

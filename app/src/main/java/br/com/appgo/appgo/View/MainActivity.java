@@ -1,5 +1,6 @@
 package br.com.appgo.appgo.View;
 
+import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -12,6 +13,8 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -25,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     public static final String LATITUDE_LOCATION = "latitude";
     public static final String LONGITUDE_LOCATION = "longitude";
     private static final String TAG_FRAGMENT_USERDATA = "fragment_dialog_userdata";
+    public static final String LOJA_ESCOLHIDA = "loja_escolhida";
+    public static final String LOJA_ESCOLHIDA_ACTION = "loja_escolhida_action";
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
@@ -181,6 +187,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     preferences.setAtividade(null);
                     Intent it = new Intent(getApplicationContext(), LoginActivity.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(it);
                 }
                 break;
@@ -348,7 +355,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
+  /*@Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("listlojas", listLoja);
@@ -358,7 +365,7 @@ public class MainActivity extends AppCompatActivity
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         savedInstanceState.getSerializable("listlojas");
-    }
+    }*/
 
     public FragmentTransaction dialogCall(String Tag){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -375,8 +382,12 @@ public class MainActivity extends AppCompatActivity
         for (Loja loja: listLoja.lojas){
             if (loja.local.latitude == latLng.latitude &&
                     loja.local.longitude == latLng.longitude){
-                Toast.makeText(this, "Whatsapp: " + loja.whatsapp +"\n" +
-                                "email:   " + loja.emailAnuncio, Toast.LENGTH_SHORT).show();
+                Intent intentAnuncio = new Intent(this, ActivityAnuncio.class);
+                intentAnuncio.setAction(LOJA_ESCOLHIDA_ACTION);
+                byte[] data = SerializationUtils.serialize(loja);
+                intentAnuncio.putExtra(LOJA_ESCOLHIDA, data);
+                //intentAnuncio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intentAnuncio);
             }
         }
         return false;
