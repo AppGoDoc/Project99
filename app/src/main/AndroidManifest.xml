@@ -100,8 +100,7 @@
         </activity>
         <activity
             android:name=".View.ActivityAnuncio"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"></action>
             </intent-filter>

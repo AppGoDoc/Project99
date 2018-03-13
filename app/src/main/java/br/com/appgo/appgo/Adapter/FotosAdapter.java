@@ -53,7 +53,7 @@ public class FotosAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.foto_carroussel_item, container, false);
         ImageView imageView = (ImageView)view.findViewById(R.id.carroussel_item);
-        photoPicasso.Photo(urlFotos.get(position), imageView, 600, 500, true);
+        photoPicasso.Photo(urlFotos.get(position), imageView, 740, 500, true);
         container.addView(view);
         return view;
     }

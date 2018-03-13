@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     RecyclerView carrousselFotos;
     List<String> urlFotos;
     TextView mAnuncioTitulo;
+    Button btnEndereco, btnWhatsapp, btnTelefone, btnEmail, btnRamo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,16 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
         carroussel.setAdapter(fotosAdapter);
         mAnuncioTitulo = (TextView)findViewById(R.id.titulo_anuncio);
         mAnuncioTitulo.setText(loja.titulo);
+        btnEndereco = (Button)findViewById(R.id.anuncio_endereco);
+        btnEndereco.setText(loja.local.endereco);
+        btnTelefone = (Button)findViewById(R.id.anuncio_telefone);
+        btnTelefone.setText(loja.telefone);
+        btnWhatsapp = (Button)findViewById(R.id.anuncio_whatsapp);
+        btnWhatsapp.setText(loja.whatsapp);
+        btnEmail = (Button) findViewById(R.id.anuncio_email);
+        btnEmail.setText(loja.emailAnuncio);
+        btnRamo = (Button) findViewById(R.id.anuncio_ramo);
+        btnRamo.setText(loja.ramo);
     }
 
     @Override
