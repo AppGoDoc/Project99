@@ -1,6 +1,5 @@
 package br.com.appgo.appgo.View;
 
-import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -13,8 +12,6 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -28,28 +25,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import org.apache.commons.lang3.SerializationUtils;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import br.com.appgo.appgo.Controller.MapLocation;
 import br.com.appgo.appgo.Persistence.PhotoPicasso;
 import br.com.appgo.appgo.Controller.SPreferences;
@@ -60,7 +53,6 @@ import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.LoadMarkers;
 import br.com.appgo.appgo.Services.LocationService;
-
 import static br.com.appgo.appgo.Constants.StringConstans.ACTION_RECEIVE_MARKER;
 import static br.com.appgo.appgo.Constants.StringConstans.LOJAS_LIST_RECEIVE;
 
@@ -87,9 +79,11 @@ public class MainActivity extends AppCompatActivity
     private Intent serviceIntent, serviceIntentMarker;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser mUser = mAuth.getCurrentUser();
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth.AuthStateListener mAuthListener;
     ListLoja listLoja = null;
     List<Marker> myMarker = new LinkedList<>();
+    BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +119,23 @@ public class MainActivity extends AppCompatActivity
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
-        CreateMarkers(listLoja);
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (intent.getAction() == ACTION_RECEIVE_MARKER){
+                    byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
+                    ListLoja listTemp = SerializationUtils.deserialize(data);
+                    if (listLoja != listTemp){
+                        listLoja = listTemp;
+                        CreateMarkers(listLoja);
+                    }
+                }
+            }
+        };
+        startService(serviceIntentMarker);
+        registerReceiver(mBroadcastReceiver, intentFilterMarker);
     }
 
     @Override
@@ -177,9 +187,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.user_login:
-                //Log.d("     +++     ", "on button anunciante");
                 FirebaseUser user = mAuth.getCurrentUser();
-                //Log.d("     +++     ", "on button anunciante");
                 if (user != null) {
                     // User is signed in
                     DialogFragment dialogFragment = new FragmentUserData();
@@ -194,7 +202,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.advertiser_tutorial:
                 break;
             case R.id.criar_loja:
-                if (mUser == null){
+                if (mUser == null || mAuth == null){
 
                 } else {
                     Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
@@ -219,7 +227,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        mapLocation.getLastLocation(googleMap);
+        //mapLocation.getLastLocation(googleMap);
     }
 
     @Override
@@ -248,14 +256,12 @@ public class MainActivity extends AppCompatActivity
         mapLocation.GoogleMapOptionsSettings(googleMap, preferences.getMapType());
         mapLocation.getLastLocation(googleMap);
         this.googleMap = googleMap;
-        CreateMarkers(listLoja);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-        CreateMarkers(listLoja);
     }
 
     @Override
@@ -271,8 +277,8 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         unregisterReceiver(mReceiver);
         stopService(serviceIntent);
-        unregisterReceiver(mBroadcastReceiver);
-        stopService(serviceIntentMarker);
+//        unregisterReceiver(mBroadcastReceiver);
+//        stopService(serviceIntentMarker);
     }
 
     @Override
@@ -280,9 +286,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         startService(serviceIntent);
         registerReceiver(mReceiver, intentFilter);
-        startService(serviceIntentMarker);
-        registerReceiver(mBroadcastReceiver, intentFilterMarker);
-        CreateMarkers(listLoja);
+//        startService(serviceIntentMarker);
+//        registerReceiver(mBroadcastReceiver, intentFilterMarker);
     }
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -297,22 +302,26 @@ public class MainActivity extends AppCompatActivity
                 }
         }
     };
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+ /*   private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction() == ACTION_RECEIVE_MARKER){
                 byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
-                listLoja = SerializationUtils.deserialize(data);
-                CreateMarkers(listLoja);
+                ListLoja listTemp = SerializationUtils.deserialize(data);
+                if (listLoja != listTemp){
+                    listLoja = listTemp;
+                    CreateMarkers(listLoja);
+                }
             }
         }
-    };
+    };*/
 
     private void CreateMarkers(ListLoja listLoja) {
         if (listLoja != null){
             PhotoPicasso photoPicasso = new PhotoPicasso(this);
             Bitmap bitmap = null;
+            int i = 0;
             for (Loja loja: listLoja.lojas){
                 LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
                 ImageView imageView = new ImageView(this);
@@ -320,14 +329,16 @@ public class MainActivity extends AppCompatActivity
                 myMarker.add(
                         googleMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .icon(BitmapDescriptorFactory.defaultMarker())
+                                //.icon(BitmapDescriptorFactory.defaultMarker())
                                 .title(loja.titulo)
                                 .snippet(loja.local.endereco))
                 );
+                photoPicasso.PhotoMarkerDownload(loja.urlIcone, myMarker.get(i));
+                i++;
             }
-            for (int i = 0; i <= listLoja.lojas.size()-1; i++){
+        /*    for (int i = 0; i <= listLoja.lojas.size()-1; i++){
                 photoPicasso.PhotoMarkerDownload(listLoja.lojas.get(i).urlIcone, myMarker.get(i));
-            }
+            }  */
             googleMap.setOnMarkerClickListener(this);
         }
     }
@@ -355,18 +366,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-  /*@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("listlojas", listLoja);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        savedInstanceState.getSerializable("listlojas");
-    }*/
-
     public FragmentTransaction dialogCall(String Tag){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         Fragment fragment = getFragmentManager().findFragmentByTag(Tag);
@@ -378,18 +377,26 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        LatLng latLng = marker.getPosition();
-        for (Loja loja: listLoja.lojas){
-            if (loja.local.latitude == latLng.latitude &&
-                    loja.local.longitude == latLng.longitude){
-                Intent intentAnuncio = new Intent(this, ActivityAnuncio.class);
-                intentAnuncio.setAction(LOJA_ESCOLHIDA_ACTION);
-                byte[] data = SerializationUtils.serialize(loja);
-                intentAnuncio.putExtra(LOJA_ESCOLHIDA, data);
-                //intentAnuncio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intentAnuncio);
+        if (marker != null){
+            LatLng latLng = marker.getPosition();
+            for (Loja loja: listLoja.lojas){
+                if (loja.local.latitude == latLng.latitude &&
+                        loja.local.longitude == latLng.longitude){
+                    Intent intentAnuncio = new Intent(this, ActivityAnuncio.class);
+                    intentAnuncio.setAction(LOJA_ESCOLHIDA_ACTION);
+                    byte[] data = SerializationUtils.serialize(loja);
+                    intentAnuncio.putExtra(LOJA_ESCOLHIDA, data);
+                    startActivity(intentAnuncio);
+                }
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mBroadcastReceiver);
+        stopService(serviceIntentMarker);
     }
 }

@@ -25,8 +25,9 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 if (control.LocalizationPermission() && gpsServices.GPSServicesRequirePermission()){
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }}, 1000);
     }

@@ -32,11 +32,12 @@ public class LocationService extends Service {
             @Override
             public void onLocationChanged(Location location){
                 Log.e(TAG, "onLocationChanged: " + location);
-                if (location.getAccuracy()<20){
+                if (location.getAccuracy()<15){
                     LocationDistance(location, mLastLocation);
                     mLastLocation.set(location);
+                    LocationChange(location.getLatitude(), location.getLongitude());
                 }
-//                LocationChange(location.getLatitude(), location.getLongitude());
+
             }
 
             @Override

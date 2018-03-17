@@ -10,9 +10,10 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_facebook"
+        style="@style/com_facebook_button"
         android:layout_width="wrap_content"
         android:layout_height="78dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/fui_idp_name_facebook"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -20,8 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -34,4 +34,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_go" />
+
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/login_facebook"
+        app:layout_constraintEnd_toEndOf="@+id/login_facebook"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/login_facebook"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+
 </android.support.constraint.ConstraintLayout>

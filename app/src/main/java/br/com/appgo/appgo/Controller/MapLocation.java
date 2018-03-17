@@ -24,7 +24,7 @@ import br.com.appgo.appgo.R;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
-public class MapLocation{
+public class MapLocation {
     Context context;
     LatLng latLng;
     FusedLocationProviderClient mFusedLocationClient;
@@ -56,12 +56,13 @@ public class MapLocation{
                     });
         }
     }
-    public void atualizarMapa(GoogleMap googleMap){
-        googleMap.animateCamera(newLatLngZoom(latLng,17.0f));
+
+    public void atualizarMapa(GoogleMap googleMap) {
+        googleMap.animateCamera(newLatLngZoom(latLng, 17.0f));
         marker = googleMap.addMarker(new MarkerOptions()
-                                            .position(latLng)
-                                            .title("Minha Posição")
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.imagemarker)));
+                .position(latLng)
+                .title("Minha Posição")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.imagemarker)));
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(17)
@@ -69,19 +70,34 @@ public class MapLocation{
                 .build();
 
     }
-    public void setMyLocationMarke(GoogleMap googleMap, LatLng latLng){
+
+    public void setMyLocationMarke(GoogleMap googleMap, LatLng latLng) {
         marker.setPosition(latLng);
-        googleMap.animateCamera(newLatLngZoom(latLng,18.0f));
-        }
+        googleMap.animateCamera(newLatLngZoom(latLng, 18.0f));
+    }
 
     public FusedLocationProviderClient getmFusedLocationClient() {
-            return mFusedLocationClient;
-        }
+        return mFusedLocationClient;
+    }
 
-    public void GoogleMapOptionsSettings(GoogleMap googleMap, int maptype){
-        googleMap.getUiSettings().setMapToolbarEnabled(true);
+    public void GoogleMapOptionsSettings(GoogleMap googleMap, int maptype) {
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setMapType(maptype);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+
+
     }
     public Context getContext() {
         return context;

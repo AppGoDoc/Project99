@@ -33,6 +33,7 @@ public class LoadAnunciosData extends Service {
     public final static String LOJA_TIPO_DOCUMENTO = "tipo_documento_loja";
     public final static String LOJA_DOCUMENTO = "documento_loja";
     public static final String RECEIVER_DATA_ANUNCIO = "receive_data_anuncio";
+    public static final String LOJA_RECEIVE_DATA = "loja_receive_data";
     private Loja loja = new Loja();
     FirebaseAuth auth = FirebaseAuth.getInstance();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference(CriarAnuncioActivity.ANUNCIOS).child(auth.getUid());
@@ -57,8 +58,10 @@ public class LoadAnunciosData extends Service {
         try {
             Intent mIntent = new Intent();
             mIntent.setAction(RECEIVER_DATA_ANUNCIO);
+            mIntent.putExtra(LOJA_RECEIVE_DATA, loja);
+            /*
             mIntent.putExtra(LOJA_TITULO, loja.titulo);
-            mIntent.putExtra(LOJA_ENDERECO, loja.local.endereco);
+            mIntent.putExtra(LOJA_ENDERECO, loja.local);
             mIntent.putExtra(LOJA_TIPO_DOCUMENTO, loja.documento.tipoDocumento);
             mIntent.putExtra(LOJA_DOCUMENTO, loja.documento.documento);
             mIntent.putExtra(LOJA_WHATSAPP, loja.whatsapp);
@@ -69,6 +72,7 @@ public class LoadAnunciosData extends Service {
             mIntent.putExtra(LOJA_FOTO1_URL, loja.urlFoto1);
             mIntent.putExtra(LOJA_FOTO2_URL, loja.urlFoto2);
             mIntent.putExtra(LOJA_FOTO3_URL, loja.urlFoto3);
+            */
             sendBroadcast(mIntent);
         }
         catch (Exception e){
