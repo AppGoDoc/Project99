@@ -241,6 +241,8 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 //Salva Anuncio Criado ou Edita.
                 if (CriarLoja()){
                     database.child(ANUNCIOS).child(auth.getUid()).setValue(loja);
+                    Intent intent = new Intent(this, SplashScreen.class);
+                    startActivity(intent);
                     finish();
                 }
                 break;
@@ -257,7 +259,7 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                     try {
                         bitmapIcone = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
                         ResizePhoto resizePhoto = new ResizePhoto(bitmapIcone.getWidth(), bitmapIcone.getHeight(), 96);
-                        bitmapIcone = resizePhoto.resizeBitmap(bitmapIcone);
+                        bitmapIcone = resizePhoto.resizeBitmapSquare(bitmapIcone);
                         bitmapIcone = new CombineImages(getApplication()).createIco(bitmapIcone);
                         buttonLoadIco.setImageBitmap(bitmapIcone);
                         resultIcone = true;
@@ -415,22 +417,9 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() == RECEIVER_DATA_ANUNCIO) {
                 loja = (Loja) intent.getSerializableExtra(LOJA_RECEIVE_DATA);
-                nomeAnuncio.setText(loja.titulo);
-                if (loja.documento.tipoDocumento.equals("CPF"))
-                    radioCPF.setChecked(true);
-                if (loja.documento.tipoDocumento.equals("CNPJ"))
-                    radioCNPJ.setChecked(true);
-                documento.setText(loja.documento.documento);
-                btnRamo.setText(loja.ramo);
-                addressName.setText(loja.local.endereco);
-                whatsapp.setText(loja.whatsapp);
-                telefone.setText(loja.telefone);
-                email.setText(loja.emailAnuncio);
-                String url_icone = loja.urlIcone;
-                String url_foto1 = loja.urlFoto1;
-                String url_foto2 = loja.urlFoto2;
-                String url_foto3 = loja.urlFoto3;
-                setPhoto(url_icone, url_foto1, url_foto2, url_foto3);
+                if (loja != null){
+                    SetLoja(loja);
+                }
             }
         }
     };
@@ -469,7 +458,10 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         loja = (Loja) savedInstanceState.getSerializable(ANUNCIO_LOCAL);
-        nomeAnuncio.setText(loja.titulo);
+        if (loja != null){
+            SetLoja(loja);
+        }
+        /*nomeAnuncio.setText(loja.titulo);
         documento.setText(loja.documento.documento);
         if (loja.documento.tipoDocumento.equals("CPF"))
             radioCPF.setChecked(true);
@@ -479,6 +471,24 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         whatsapp.setText(loja.whatsapp);
         telefone.setText(loja.telefone);
         btnRamo.setText(loja.ramo);
+        email.setText(loja.emailAnuncio); */
+    }
+    void SetLoja(Loja loja){
+        nomeAnuncio.setText(loja.titulo);
+        if (loja.documento.tipoDocumento.equals("CPF"))
+            radioCPF.setChecked(true);
+        if (loja.documento.tipoDocumento.equals("CNPJ"))
+            radioCNPJ.setChecked(true);
+        documento.setText(loja.documento.documento);
+        btnRamo.setText(loja.ramo);
+        addressName.setText(loja.local.endereco);
+        whatsapp.setText(loja.whatsapp);
+        telefone.setText(loja.telefone);
         email.setText(loja.emailAnuncio);
+        String url_icone = loja.urlIcone;
+        String url_foto1 = loja.urlFoto1;
+        String url_foto2 = loja.urlFoto2;
+        String url_foto3 = loja.urlFoto3;
+        setPhoto(url_icone, url_foto1, url_foto2, url_foto3);
     }
 }

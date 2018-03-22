@@ -12,6 +12,7 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -25,8 +26,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.AvoidType;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Step;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,14 +45,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import org.apache.commons.lang3.SerializationUtils;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import br.com.appgo.appgo.Controller.MapLocation;
+import br.com.appgo.appgo.Model.Local;
 import br.com.appgo.appgo.Persistence.PhotoPicasso;
 import br.com.appgo.appgo.Controller.SPreferences;
 import br.com.appgo.appgo.Fragment.ConfirmLogout;
@@ -55,6 +69,8 @@ import br.com.appgo.appgo.Services.LoadMarkers;
 import br.com.appgo.appgo.Services.LocationService;
 import static br.com.appgo.appgo.Constants.StringConstans.ACTION_RECEIVE_MARKER;
 import static br.com.appgo.appgo.Constants.StringConstans.LOJAS_LIST_RECEIVE;
+import static br.com.appgo.appgo.View.ActivityAnuncio.LATITUDE_LOJA;
+import static br.com.appgo.appgo.View.ActivityAnuncio.LONGITUDE_LOJA;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
@@ -70,6 +86,9 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG_FRAGMENT_USERDATA = "fragment_dialog_userdata";
     public static final String LOJA_ESCOLHIDA = "loja_escolhida";
     public static final String LOJA_ESCOLHIDA_ACTION = "loja_escolhida_action";
+    private static final int REQUEST_LATLNG_LOJA = 12;
+    public static final int RESULT_LATLNG_LOJA = 13;
+    public static final String LATLNG_LOJA = "loja_location";
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
@@ -77,13 +96,13 @@ public class MainActivity extends AppCompatActivity
     private SPreferences preferences;
     private IntentFilter intentFilter, intentFilterMarker;
     private Intent serviceIntent, serviceIntentMarker;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser mUser = mAuth.getCurrentUser();
+    private FirebaseAuth mAuth = null;
+    private FirebaseUser mUser = null;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth.AuthStateListener mAuthListener;
     ListLoja listLoja = null;
     List<Marker> myMarker = new LinkedList<>();
-    BroadcastReceiver mBroadcastReceiver;
+    LatLng myLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +111,8 @@ public class MainActivity extends AppCompatActivity
 
         //Shared Preferences archive to save configs
         preferences = new SPreferences(getApplicationContext());
-
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         floatingActionButton = findViewById(R.id.floatteste);
         //Calling the view components.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,24 +139,31 @@ public class MainActivity extends AppCompatActivity
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
-
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                if (intent.getAction() == ACTION_RECEIVE_MARKER){
-                    byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
-                    ListLoja listTemp = SerializationUtils.deserialize(data);
-                    if (listLoja != listTemp){
-                        listLoja = listTemp;
-                        CreateMarkers(listLoja);
-                    }
-                }
-            }
-        };
         startService(serviceIntentMarker);
         registerReceiver(mBroadcastReceiver, intentFilterMarker);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "getLocation", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
+
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction() == ACTION_RECEIVE_MARKER){
+                byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
+                ListLoja listTemp = SerializationUtils.deserialize(data);
+                if (listLoja != listTemp){
+                    listLoja = listTemp;
+                    CreateMarkers(listLoja);
+                }
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -195,7 +222,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     preferences.setAtividade(null);
                     Intent it = new Intent(getApplicationContext(), LoginActivity.class);
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(it);
                 }
                 break;
@@ -207,6 +234,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
                     startActivity(criarLojaIntent);
+                    finish();
                 }
                 break;
             case R.id.filtrar:
@@ -277,8 +305,7 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         unregisterReceiver(mReceiver);
         stopService(serviceIntent);
-//        unregisterReceiver(mBroadcastReceiver);
-//        stopService(serviceIntentMarker);
+
     }
 
     @Override
@@ -286,8 +313,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         startService(serviceIntent);
         registerReceiver(mReceiver, intentFilter);
-//        startService(serviceIntentMarker);
-//        registerReceiver(mBroadcastReceiver, intentFilterMarker);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
     }
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -297,9 +324,10 @@ public class MainActivity extends AppCompatActivity
             if (intent.getAction() == LOCATION_RESOURCES){
                 latitude = (Double) intent.getDoubleExtra(LATITUDE_LOCATION, 0);
                 longitude = (Double) intent.getDoubleExtra(LONGITUDE_LOCATION, 0);
-                LatLng latLng = new LatLng(latitude, longitude);
-                mapLocation.setMyLocationMarke(googleMap,latLng);
-                }
+                myLocation = new LatLng(latitude, longitude);
+                mapLocation.setMyLocationMarke(googleMap,myLocation);
+
+            }
         }
     };
  /*   private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -349,6 +377,12 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_ERRO_PLAY_SERVICES && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
         }
+        if (requestCode == REQUEST_LATLNG_LOJA && resultCode == RESULT_LATLNG_LOJA){
+            double latitude = data.getDoubleExtra(LATITUDE_LOJA, 0);
+            double longitude = data.getDoubleExtra(LONGITUDE_LOJA, 0);
+            LatLng latLng = new LatLng(latitude, longitude);
+            Rota(latLng);
+        }
     }
 
     @Override
@@ -377,6 +411,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        //googleMap.clear();
         if (marker != null){
             LatLng latLng = marker.getPosition();
             for (Loja loja: listLoja.lojas){
@@ -386,7 +421,7 @@ public class MainActivity extends AppCompatActivity
                     intentAnuncio.setAction(LOJA_ESCOLHIDA_ACTION);
                     byte[] data = SerializationUtils.serialize(loja);
                     intentAnuncio.putExtra(LOJA_ESCOLHIDA, data);
-                    startActivity(intentAnuncio);
+                    startActivityForResult(intentAnuncio, REQUEST_LATLNG_LOJA);
                 }
             }
         }
@@ -398,5 +433,37 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver);
         stopService(serviceIntentMarker);
+    }
+    public void Rota(LatLng latLng){
+        GoogleDirection.withServerKey(getResources().getString(R.string.google_maps_server_key))
+                .from(myLocation)
+                .to(latLng)
+                .avoid(AvoidType.FERRIES)
+                .avoid(AvoidType.HIGHWAYS)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if(direction.isOK()) {
+                            // Do something
+                            Toast.makeText(MainActivity.this, "ok direction", Toast.LENGTH_SHORT).show();
+                            List<Step> stepList = direction.getRouteList().get(0).getLegList().get(0).getStepList();
+                            ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline
+                                    (getApplicationContext(), stepList, 5, Color.RED, 3, Color.BLUE);
+                            for (PolylineOptions polylineOption : polylineOptionList) {
+                                googleMap.addPolyline(polylineOption);
+                            }
+
+                        } else {
+                            Toast.makeText(MainActivity.this, "Impossivel criar rota", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+                        Toast.makeText(MainActivity.this, "fALHA NA DIRECTION", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
     }
 }

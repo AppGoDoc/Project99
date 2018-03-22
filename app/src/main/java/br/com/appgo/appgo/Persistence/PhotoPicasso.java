@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,7 +34,11 @@ import br.com.appgo.appgo.R;
 public class PhotoPicasso {
     Context context;
     Bitmap bitmap = null;
-    public PhotoPicasso(Context context){this.context = context;}
+    File fileTmp;
+    public PhotoPicasso(Context context){
+        this.context = context;
+        fileTmp = null;
+    }
 
     public void PhotoOrigSize(String url, final ImageView imageView, boolean token) {
         if (token) {
@@ -101,6 +107,7 @@ public class PhotoPicasso {
             });
         }
     }
+
     public void PhotoMarkerDownload(String url, final Marker marker){
         StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
         try {
@@ -134,4 +141,20 @@ public class PhotoPicasso {
             });
         }
     }
+    public Uri PhotoDownload(String url, Uri uri){
+        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+        try {
+            final File file = File.createTempFile("foto",".png");
+            reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                }
+            });
+            uri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return uri;
+    }
+
 }

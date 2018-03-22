@@ -59,10 +59,10 @@ public class MapLocation {
 
     public void atualizarMapa(GoogleMap googleMap) {
         googleMap.animateCamera(newLatLngZoom(latLng, 17.0f));
-        marker = googleMap.addMarker(new MarkerOptions()
+     /*   marker = googleMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("Minha Posição")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.imagemarker)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.imagemarker)));*/
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(17)
@@ -72,7 +72,7 @@ public class MapLocation {
     }
 
     public void setMyLocationMarke(GoogleMap googleMap, LatLng latLng) {
-        marker.setPosition(latLng);
+        /*marker.setPosition(latLng);*/
         googleMap.animateCamera(newLatLngZoom(latLng, 18.0f));
     }
 
@@ -83,6 +83,7 @@ public class MapLocation {
     public void GoogleMapOptionsSettings(GoogleMap googleMap, int maptype) {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        googleMap.isTrafficEnabled();
         googleMap.setMapType(maptype);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

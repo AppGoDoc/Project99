@@ -30,4 +30,8 @@ public class ResizePhoto {
                 heightSize(), true);
         return bitmap;
     }
+    public Bitmap resizeBitmapSquare(Bitmap bitmap){
+        bitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, true);
+        return bitmap;
+    }
 }
