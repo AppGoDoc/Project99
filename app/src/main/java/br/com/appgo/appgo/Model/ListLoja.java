@@ -1,10 +1,7 @@
 package br.com.appgo.appgo.Model;
 
-import com.google.android.gms.maps.model.Marker;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

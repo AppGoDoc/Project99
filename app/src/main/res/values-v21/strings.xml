@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="endereco_anunciante">Localização do Anúncio</string>
-
+    <string name="denunciar_abuso">Conteúdo abusivo, denúncie este anúncio!</string>
 </resources>

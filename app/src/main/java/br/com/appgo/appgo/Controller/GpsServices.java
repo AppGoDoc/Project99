@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-
-import com.google.android.gms.location.LocationRequest;
-
 /**
  * Created by hex on 01/02/18.
  */

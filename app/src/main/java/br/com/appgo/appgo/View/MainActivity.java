@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -29,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.AvoidType;
@@ -52,7 +50,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import org.apache.commons.lang3.SerializationUtils;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +67,6 @@ import br.com.appgo.appgo.Services.LocationService;
 import static br.com.appgo.appgo.Constants.StringConstans.ACTION_RECEIVE_MARKER;
 import static br.com.appgo.appgo.Constants.StringConstans.LOJAS_LIST_RECEIVE;
 import static br.com.appgo.appgo.View.ActivityAnuncio.LATITUDE_LOJA;
-import static br.com.appgo.appgo.View.ActivityAnuncio.LONGITUDE_LOJA;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
@@ -99,10 +95,12 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth = null;
     private FirebaseUser mUser = null;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    FirebaseAuth.AuthStateListener mAuthListener;
+//    FirebaseAuth.AuthStateListener mAuthListener;
     ListLoja listLoja = null;
     List<Marker> myMarker = new LinkedList<>();
     LatLng myLocation = null;
+    LatLng destination = null;
+    Polyline mPolyline = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +142,7 @@ public class MainActivity extends AppCompatActivity
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "getLocation", Toast.LENGTH_SHORT).show();
-
+                mPolyline.remove();
             }
         });
     }
@@ -330,25 +327,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
     };
- /*   private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction() == ACTION_RECEIVE_MARKER){
-                byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
-                ListLoja listTemp = SerializationUtils.deserialize(data);
-                if (listLoja != listTemp){
-                    listLoja = listTemp;
-                    CreateMarkers(listLoja);
-                }
-            }
-        }
-    };*/
 
     private void CreateMarkers(ListLoja listLoja) {
         if (listLoja != null){
             PhotoPicasso photoPicasso = new PhotoPicasso(this);
-            Bitmap bitmap = null;
             int i = 0;
             for (Loja loja: listLoja.lojas){
                 LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
@@ -377,11 +359,18 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_ERRO_PLAY_SERVICES && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
         }
-        if (requestCode == REQUEST_LATLNG_LOJA && resultCode == RESULT_LATLNG_LOJA){
-            double latitude = data.getDoubleExtra(LATITUDE_LOJA, 0);
-            double longitude = data.getDoubleExtra(LONGITUDE_LOJA, 0);
-            LatLng latLng = new LatLng(latitude, longitude);
-            Rota(latLng);
+        if (requestCode == REQUEST_LATLNG_LOJA) {
+            if (resultCode == RESULT_LATLNG_LOJA) {
+                Local tmpLocal = (Local) data.getSerializableExtra(LATITUDE_LOJA);
+                destination = new LatLng(tmpLocal.latitude, tmpLocal.longitude);
+                myLocation = new LatLng(
+                        googleMap.getMyLocation().getLatitude(),
+                        googleMap.getMyLocation().getLongitude()
+                );
+                if (myLocation!=null && destination!=null){
+                    Rota();
+                }
+            }
         }
     }
 
@@ -434,10 +423,10 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(mBroadcastReceiver);
         stopService(serviceIntentMarker);
     }
-    public void Rota(LatLng latLng){
+    public void Rota(){
         GoogleDirection.withServerKey(getResources().getString(R.string.google_maps_server_key))
                 .from(myLocation)
-                .to(latLng)
+                .to(destination)
                 .avoid(AvoidType.FERRIES)
                 .avoid(AvoidType.HIGHWAYS)
                 .execute(new DirectionCallback() {
@@ -450,7 +439,7 @@ public class MainActivity extends AppCompatActivity
                             ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline
                                     (getApplicationContext(), stepList, 5, Color.RED, 3, Color.BLUE);
                             for (PolylineOptions polylineOption : polylineOptionList) {
-                                googleMap.addPolyline(polylineOption);
+                                mPolyline = googleMap.addPolyline(polylineOption);
                             }
 
                         } else {
@@ -463,7 +452,5 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "fALHA NA DIRECTION", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
     }
 }

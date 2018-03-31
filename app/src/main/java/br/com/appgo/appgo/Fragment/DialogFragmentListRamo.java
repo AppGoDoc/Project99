@@ -1,17 +1,13 @@
 package br.com.appgo.appgo.Fragment;
 
 import android.app.DialogFragment;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import br.com.appgo.appgo.Adapter.RamoListAdapter;
 import br.com.appgo.appgo.Controller.SPreferences;
 import br.com.appgo.appgo.R;

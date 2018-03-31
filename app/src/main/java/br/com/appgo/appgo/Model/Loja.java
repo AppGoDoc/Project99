@@ -1,9 +1,5 @@
 package br.com.appgo.appgo.Model;
 
-import android.os.Parcelable;
-
-import com.google.android.gms.maps.model.Marker;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +14,12 @@ public class Loja implements Serializable {
     public Local local;
     public Documento documento;
     public List<String> curtidas;
+    public List<Comentario> comentarios;
 
     public Loja(){
         local = new Local();
         documento = new Documento();
         curtidas = new ArrayList<>();
+        comentarios = new ArrayList<>();
     }
 }

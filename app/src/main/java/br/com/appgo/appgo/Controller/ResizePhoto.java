@@ -1,10 +1,7 @@
 package br.com.appgo.appgo.Controller;
 
 import android.graphics.Bitmap;
-
-import com.google.zxing.client.result.ParsedResult;
-
-import static java.lang.Double.valueOf;
+import android.widget.ImageView;
 
 /**
  * Created by hex on 21/02/18.
@@ -33,5 +30,9 @@ public class ResizePhoto {
     public Bitmap resizeBitmapSquare(Bitmap bitmap){
         bitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, true);
         return bitmap;
+    }
+    public Bitmap ResizeToImage(ImageView imageView, Bitmap bitmap){
+        return Bitmap.createScaledBitmap(bitmap, (int) widht,
+                (int) height, true);
     }
 }

@@ -2,7 +2,6 @@ package br.com.appgo.appgo.Controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.android.gms.maps.GoogleMap;
 
 /**

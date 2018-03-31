@@ -3,11 +3,8 @@ package br.com.appgo.appgo.Services;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 import java.util.Locale;
 

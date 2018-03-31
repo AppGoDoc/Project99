@@ -1,6 +1,5 @@
 package br.com.appgo.appgo.View;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -41,7 +40,6 @@ import br.com.appgo.appgo.Fragment.ConfirmLocationFragment;
 import br.com.appgo.appgo.Model.User;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.FindAddress;
-
 import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_LATITUDE;
 import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_LONGITUDE;
 import static br.com.appgo.appgo.View.CriarAnuncioActivity.ADRESS_NAME;
@@ -66,7 +64,7 @@ public class SearchOnMapActivity extends FragmentActivity
     private Marker marker;
     private FloatingActionButton buttonConfirm;
     FirebaseAuth auth = FirebaseAuth.getInstance();
-    DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ auth.getUid());
+    DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ auth.getCurrentUser().getUid());
     User user = new User();
 
     @Override
@@ -95,7 +93,8 @@ public class SearchOnMapActivity extends FragmentActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MudaMeuNome(addressName.getText().toString());
+                String address = addressName.getText().toString();
+                MudaMeuNome(address);
             }
         });
 
@@ -124,15 +123,6 @@ public class SearchOnMapActivity extends FragmentActivity
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mapLocation.atualizarMapa(googleMap);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Intent intent = getIntent();
-        String nameAdress = intent.getStringExtra(ADRESS_NAME).toString();
-        addressName.setText(nameAdress);
-        MudaMeuNome(nameAdress);
     }
 
     @Override
@@ -217,10 +207,10 @@ public class SearchOnMapActivity extends FragmentActivity
         }
         if (!addressText.isEmpty()) {
             addressList = findAddress.getmFindAddress(addressText);
-            if (addressList.isEmpty()){
+            if (addressList == null){
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-                if (fragment != null)
+                if (fragment == null)
                     fragmentTransaction.remove(fragment);
                 fragmentTransaction.addToBackStack(TAG_FRAGMENT);
                 DialogFragment dialogFragment = new AdressNotFind();

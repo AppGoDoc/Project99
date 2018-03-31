@@ -1,7 +1,6 @@
 package br.com.appgo.appgo.Controller;
 
 import android.util.Log;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -42,27 +44,8 @@ import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.Services.LoadAnunciosData;
 import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_DOCUMENTO;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_EMAIL;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_ENDERECO;
 import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_LOCAL;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_NOME;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_RAMO;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_TELEFONE;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_TIPO_DOCUMENTO;
-import static br.com.appgo.appgo.Constants.StringConstans.ANUNCIO_WHATSAPP;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_DOCUMENTO;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_EMAIL;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_FOTO1_URL;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_FOTO2_URL;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_FOTO3_URL;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_ICONE_URL;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_RAMO;
 import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_RECEIVE_DATA;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_TELEFONE;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_TIPO_DOCUMENTO;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_TITULO;
-import static br.com.appgo.appgo.Services.LoadAnunciosData.LOJA_WHATSAPP;
 import static br.com.appgo.appgo.Services.LoadAnunciosData.RECEIVER_DATA_ANUNCIO;
 
 /**
@@ -92,10 +75,11 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
     private static final int REQUEST_FIND_ADDRESS = 101;
     private String docType = null;
     private ImageView buttonLoadIco, mFoto1, mFoto2, mFoto3;
-    private Button btnRamo, btnFindAddress, btnSalvar;
+    private Button btnRamo, btnSalvar, addressName;
+    private FloatingActionButton fltFoto1, fltFoto2, fltFoto3;
     private RadioGroup docChoose;
     private RadioButton radioCPF, radioCNPJ;
-    private EditText nomeAnuncio, documento, whatsapp, telefone, email, addressName;
+    private EditText nomeAnuncio, documento, whatsapp, telefone, email;
     ProgressBar progressBar1, progressBar2, progressBar3, progressBarIcone;
     SPreferences preferences;
     MaskEditTextChangedListener maskWhats, maskTel;
@@ -133,19 +117,21 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         progressBar3.setVisibility(View.GONE);
         progressBarIcone = (ProgressBar) findViewById(R.id.progress_bar_icone);
         progressBarIcone.setVisibility(View.GONE);
+        fltFoto1 = (FloatingActionButton) findViewById(R.id.float_foto1);
+        fltFoto1.setOnClickListener(this);
+        fltFoto2 = (FloatingActionButton) findViewById(R.id.float_foto2);
+        fltFoto2.setOnClickListener(this);
+        fltFoto3 = (FloatingActionButton)findViewById(R.id.float_foto3);
+        fltFoto3.setOnClickListener(this);
         mFoto1 = (ImageView) findViewById(R.id.foto1);
-        mFoto1.setOnClickListener(this);
         mFoto2 = (ImageView) findViewById(R.id.foto2);
-        mFoto2.setOnClickListener(this);
         mFoto3 = (ImageView) findViewById(R.id.foto3);
-        mFoto3.setOnClickListener(this);
         nomeAnuncio = (EditText) findViewById(R.id.nome_anuncio);
         documento = (EditText) findViewById(R.id.documento_anuncio);
-        addressName = (EditText) findViewById(R.id.adress_name);
+        addressName = (Button) findViewById(R.id.adress_name);
+        addressName.setOnClickListener(this);
         btnRamo = (Button)findViewById(R.id.btn_ramo);
         btnRamo.setOnClickListener(this);
-        btnFindAddress = (Button) findViewById(R.id.btn_find_address);
-        btnFindAddress.setOnClickListener(this);
         btnSalvar = (Button) findViewById(R.id.btn_salvar);
         btnSalvar.setOnClickListener(this);
         whatsapp = (EditText)findViewById(R.id.whatsapp);
@@ -209,17 +195,22 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intentIco, REQUEST_ICONE);
                 break;
-            case R.id.foto1:
+            case R.id.adress_name:
+                Intent intentFindAddress = new Intent(this, SearchOnMapActivity.class);
+                startActivityForResult(intentFindAddress, REQUEST_FIND_ADDRESS);
+
+                break;
+            case R.id.float_foto1:
                 Intent intentFoto1 = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intentFoto1, REQUEST_FOTO_1);
                 break;
-            case R.id.foto2:
+            case R.id.float_foto2:
                 Intent intentFoto2 = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intentFoto2, REQUEST_FOTO_2);
                 break;
-            case R.id.foto3:
+            case R.id.float_foto3:
                 Intent intentFoto3 = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intentFoto3, REQUEST_FOTO_3);
@@ -228,19 +219,10 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 DialogFragment dialogFragment = new DialogFragmentListRamo();
                 dialogFragment.show(dialogCall(FRAGMENT_RAMO_ATIVIDADE), FRAGMENT_RAMO_ATIVIDADE);
                 break;
-            case R.id.btn_find_address:
-                if (addressName.getText().toString().isEmpty()){
-                    Toast.makeText(this, "Digite um endereço para pesquisa.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intentFindAddress = new Intent(this, SearchOnMapActivity.class);
-                    intentFindAddress.putExtra(ADRESS_NAME, addressName.getText().toString());
-                    startActivityForResult(intentFindAddress, REQUEST_FIND_ADDRESS);
-                }
-                break;
             case R.id.btn_salvar:
                 //Salva Anuncio Criado ou Edita.
                 if (CriarLoja()){
-                    database.child(ANUNCIOS).child(auth.getUid()).setValue(loja);
+                    database.child(ANUNCIOS).child(auth.getCurrentUser().getUid()).setValue(loja);
                     Intent intent = new Intent(this, SplashScreen.class);
                     startActivity(intent);
                     finish();
@@ -274,9 +256,8 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                     Uri targetUriFoto1 = data.getData();
                     try {
                         bitmapFoto1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto1));
-                        ResizePhoto resizePhoto = new ResizePhoto(bitmapFoto1.getWidth(),bitmapFoto1.getHeight(),512);
-                        bitmapFoto1 = resizePhoto.resizeBitmap(bitmapFoto1);
-                        mFoto1.setImageBitmap(bitmapFoto1);
+                        ResizePhoto resize = new ResizePhoto(mFoto1.getWidth(), mFoto1.getHeight(), 0);
+                        mFoto1.setImageBitmap(resize.ResizeToImage(mFoto1, bitmapFoto1));
                         resultFoto1 = true;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -288,9 +269,8 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                     Uri targetUriFoto2 = data.getData();
                     try {
                         bitmapFoto2 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto2));
-                        ResizePhoto resizePhoto = new ResizePhoto(bitmapFoto2.getWidth(),bitmapFoto2.getHeight(),512);
-                        bitmapFoto2 = resizePhoto.resizeBitmap(bitmapFoto2);
-                        mFoto2.setImageBitmap(bitmapFoto2);
+                        ResizePhoto resize = new ResizePhoto(mFoto2.getWidth(), mFoto2.getHeight(), 0);
+                        mFoto2.setImageBitmap(resize.ResizeToImage(mFoto2, bitmapFoto2));
                         resultFoto2 = true;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -302,9 +282,8 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                     Uri targetUriFoto3 = data.getData();
                     try {
                         bitmapFoto3 = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUriFoto3));
-                        ResizePhoto resizePhoto = new ResizePhoto(bitmapFoto3.getWidth(),bitmapFoto3.getHeight(),512);
-                        bitmapFoto3 = resizePhoto.resizeBitmap(bitmapFoto3);
-                        mFoto3.setImageBitmap(bitmapFoto3);
+                        ResizePhoto resize = new ResizePhoto(mFoto3.getWidth(), mFoto3.getHeight(), 0);
+                        mFoto3.setImageBitmap(resize.ResizeToImage(mFoto3, bitmapFoto3));
                         resultFoto3 = true;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -396,15 +375,16 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         }
         //Grava Anuncio Na Base de Dados;
         if (token){
+            FirebaseUser user = auth.getCurrentUser();
             loja.emailAnuncio = email.getText().toString();
             loja.ramo = btnRamo.getText().toString();
             loja.telefone = telefone.getText().toString();
             loja.whatsapp = whatsapp.getText().toString();
-            loja.anunciante = auth.getCurrentUser().getUid();
-            loja.urlIcone = uploaFile.UploadPhoto(bitmapIcone, "icone.png", reference, auth.getUid());
-            loja.urlFoto1 = uploaFile.UploadPhoto(bitmapFoto1, "foto_1", reference, auth.getUid());
-            loja.urlFoto2 = uploaFile.UploadPhoto(bitmapFoto2, "foto_2", reference, auth.getUid());
-            loja.urlFoto3 = uploaFile.UploadPhoto(bitmapFoto3, "foto_3", reference, auth.getUid());
+            loja.anunciante = user.getUid();
+            loja.urlIcone = uploaFile.UploadPhoto(bitmapIcone, "icone.png", reference, user.getUid());
+            loja.urlFoto1 = uploaFile.UploadPhoto(bitmapFoto1, "foto_1", reference, user.getUid());
+            loja.urlFoto2 = uploaFile.UploadPhoto(bitmapFoto2, "foto_2", reference, user.getUid());
+            loja.urlFoto3 = uploaFile.UploadPhoto(bitmapFoto3, "foto_3", reference, user.getUid());
        }
         else {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -427,9 +407,9 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
     private void setPhoto(String url_icone, String url_foto1, String url_foto2, String url_foto3) {
         PhotoPicasso picasso = new PhotoPicasso(getApplicationContext());
         picasso.PhotoOrigSize(url_icone, buttonLoadIco, !resultIcone);
-        picasso.Photo600x400(url_foto1, mFoto1, !resultFoto1);
-        picasso.Photo600x400(url_foto2, mFoto2, !resultFoto2);
-        picasso.Photo600x400(url_foto3, mFoto3, !resultFoto3);
+        picasso.PhotoBorderless(url_foto1, mFoto1, !resultFoto1);
+        picasso.PhotoBorderless(url_foto2, mFoto2, !resultFoto2);
+        picasso.PhotoBorderless(url_foto3, mFoto3, !resultFoto3);
     }
 
     @Override

@@ -2,24 +2,10 @@ package br.com.appgo.appgo.Persistence;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
-import java.net.URL;
-
-import br.com.appgo.appgo.View.CriarAnuncioActivity;
 
 /**
  * Created by hex on 03/03/18.

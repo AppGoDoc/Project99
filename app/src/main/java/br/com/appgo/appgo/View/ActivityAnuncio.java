@@ -3,14 +3,14 @@ package br.com.appgo.appgo.View;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,32 +18,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import org.apache.commons.lang3.SerializationUtils;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 import br.com.appgo.appgo.Adapter.FotosAdapter;
+import br.com.appgo.appgo.Controller.PermissionControl;
 import br.com.appgo.appgo.Controller.UnmaskPhoneNumber;
 import br.com.appgo.appgo.Model.Local;
 import br.com.appgo.appgo.Model.Loja;
 import br.com.appgo.appgo.R;
-
-import static br.com.appgo.appgo.View.MainActivity.LATLNG_LOJA;
 import static br.com.appgo.appgo.View.MainActivity.LOJA_ESCOLHIDA;
 import static br.com.appgo.appgo.View.MainActivity.LOJA_ESCOLHIDA_ACTION;
 import static br.com.appgo.appgo.View.MainActivity.RESULT_LATLNG_LOJA;
@@ -55,13 +55,20 @@ import static br.com.appgo.appgo.View.MainActivity.RESULT_LATLNG_LOJA;
 public class ActivityAnuncio extends AppCompatActivity implements View.OnClickListener {
     public static final String LATITUDE_LOJA = "latitude_loja";
     public static final String LONGITUDE_LOJA = "longitude_loja";
+    public static final String LOJA_COMENT = "loja_comentada";
+    public static final String EMAIL_APP_DENUNCIA = "appgo.website@gmail.com";
     Loja loja = null;
     List<String> urlFotos;
     TextView mAnuncioTitulo, curtidas, comentarios;
-    Button btnEndereco, btnWhatsapp, btnTelefone, btnEmail, btnRamo;
+    Button btnEndereco, btnRamo, btnDenunciar;
+    ImageView btnWhatsapp, btnTelefone, btnEmail;
     ImageButton curtir, comentar, compartilhar;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     boolean curtidaToken = false;
+    String fileShare;
+    Uri bitmapUri;
+    Bitmap bitmap = null;
+    private PermissionControl control;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +81,8 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                 (HorizontalInfiniteCycleViewPager) findViewById(R.id.carroussel_fotos);
         FotosAdapter fotosAdapter = new FotosAdapter(urlFotos, getApplicationContext());
         carroussel.setAdapter(fotosAdapter);
+        btnDenunciar = (Button)findViewById(R.id.denuncia_button);
+        btnDenunciar.setOnClickListener(this);
         compartilhar = (ImageButton)findViewById(R.id.compartilhar_anuncio);
         compartilhar.setOnClickListener(this);
         comentarios = (TextView)findViewById(R.id.contagem_comentar);
@@ -88,17 +97,16 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
         btnEndereco = (Button)findViewById(R.id.anuncio_endereco);
         btnEndereco.setText(loja.local.endereco);
         btnEndereco.setOnClickListener(this);
-        btnTelefone = (Button)findViewById(R.id.anuncio_telefone);
-        btnTelefone.setText(loja.telefone);
+        btnTelefone = (ImageView) findViewById(R.id.image_telefone);
         btnTelefone.setOnClickListener(this);
-        btnWhatsapp = (Button)findViewById(R.id.anuncio_whatsapp);
-        btnWhatsapp.setText(loja.whatsapp);
+        btnWhatsapp = (ImageView) findViewById(R.id.image_whatsapp);
         btnWhatsapp.setOnClickListener(this);
-        btnEmail = (Button) findViewById(R.id.anuncio_email);
-        btnEmail.setText(loja.emailAnuncio);
+        btnEmail = (ImageView) findViewById(R.id.image_email);
         btnEmail.setOnClickListener(this);
-        btnRamo = (Button) findViewById(R.id.anuncio_ramo);
+        btnRamo = (Button)findViewById(R.id.anuncio_ramo);
         btnRamo.setText(loja.ramo);
+        fileShare = null;
+        bitmapUri = null;
     }
 
     @Override
@@ -110,17 +118,34 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.denuncia_button:
+                Intent denunciaMail = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
+                denunciaMail.setType("text/plain");
+                denunciaMail.putExtra(Intent.EXTRA_SUBJECT, "Denuncia de abuso de " + user.getDisplayName());
+                //it.putExtra(Intent.EXTRA_TEXT, "Body of email");
+                denunciaMail.setData(Uri.parse("mailto:" + EMAIL_APP_DENUNCIA)); // or just "mailto:" for blank
+                denunciaMail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+                startActivity(denunciaMail);
+                break;
             case R.id.comentar_anuncio:
-
+                if (user != null){
+                    Intent comentIntent = new Intent(this, ComentActivity.class);
+                    comentIntent.putExtra(LOJA_COMENT, loja);
+                    startActivity(comentIntent);
+                }
+                else {
+                    Toast.makeText(this, "É preciso estar logado\n" +
+                            "para fazer um comentário.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.anuncio_endereco:
                 Intent intentRota = new Intent();
-                intentRota.putExtra(LATITUDE_LOJA, loja.local.latitude);
+                intentRota.putExtra(LATITUDE_LOJA, loja.local);
                 intentRota.putExtra(LONGITUDE_LOJA, loja.local.longitude);
                 setResult(RESULT_LATLNG_LOJA, intentRota);
                 finish();
                 break;
-            case R.id.anuncio_telefone:
+            case R.id.image_telefone:
                 final int REQUEST_PHONE_CALL = 1;
                 UnmaskPhoneNumber unmaskPhoneNumber = new UnmaskPhoneNumber();
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + unmaskPhoneNumber.whatsNumber(loja.telefone)));
@@ -137,7 +162,7 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                     startActivity(intent);
                 }
                 break;
-            case R.id.anuncio_whatsapp:
+            case R.id.image_whatsapp:
                 UnmaskPhoneNumber unmask = new UnmaskPhoneNumber();
                 String number = unmask.whatsNumber(loja.whatsapp);
                 PackageManager packageManager = this.getPackageManager();
@@ -151,11 +176,14 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                     if (i.resolveActivity(packageManager) != null) {
                         this.startActivity(i);
                     }
+                    else {
+                        Toast.makeText(this, "Você precisa instalar o WhatsApp no seu celular.", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e){
                     e.printStackTrace();
                 }
                 break;
-            case R.id.anuncio_email:
+            case R.id.image_email:
                 Intent it = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
                 it.setType("text/plain");
                 it.putExtra(Intent.EXTRA_SUBJECT, "Cliente AppGo! " + user.getDisplayName());
@@ -168,7 +196,7 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                 setCurtidas();
                 break;
             case R.id.compartilhar_anuncio:
-                shareImage("https://content.linkedin.com/content/dam/me/learning/blog/2017/Junepics/Money.jpg");
+                shareImage(loja.urlFoto1);
                 break;
         }
     }
@@ -176,7 +204,7 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     private Loja RequestLoja() {
         Loja loja = null;
         Intent intent = getIntent();
-        if (intent.getAction() == LOJA_ESCOLHIDA_ACTION){
+        if (intent.getAction().equals(LOJA_ESCOLHIDA_ACTION)){
             byte[] data = intent.getByteArrayExtra(LOJA_ESCOLHIDA);
             loja = SerializationUtils.deserialize(data);
         }
@@ -195,35 +223,31 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
         finish();
     }
     public void shareImage(String url) {
-        Picasso.with(getApplicationContext()).load(url).into(new Target() {
-            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("image/*, text/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, loja.titulo + " esta no AppGo!");
-                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
-                startActivity(Intent.createChooser(i, "Share Image"));
-            }
-            @Override public void onBitmapFailed(Drawable errorDrawable) { }
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-        });
-    }
-    public Uri getLocalBitmapUri(Bitmap bmp) {
-        Uri bmpUri = null;
+        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
         try {
-            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-            bmpUri = Uri.fromFile(file);
+            final File file = File.createTempFile("foto",".png");
+            reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                    fileShare = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap,"title", null);
+                    bitmapUri = Uri.parse(fileShare);
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return bmpUri;
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("image/*, text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, loja.titulo + " esta no AppGo!");
+        i.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+        startActivity(Intent.createChooser(i, "Share Image"));
+
     }
     private int getCurtidas() {
         if (user == null){

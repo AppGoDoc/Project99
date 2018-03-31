@@ -1,14 +1,11 @@
 package br.com.appgo.appgo.View;
 
 import android.content.Intent;
-import android.database.CursorJoiner;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import br.com.appgo.appgo.Controller.GpsServices;
 import br.com.appgo.appgo.Controller.PermissionControl;
 import br.com.appgo.appgo.R;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,8 +36,8 @@ public class LoadAnunciosData extends Service {
     public static final String RECEIVER_DATA_ANUNCIO = "receive_data_anuncio";
     public static final String LOJA_RECEIVE_DATA = "loja_receive_data";
     private Loja loja = new Loja();
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(CriarAnuncioActivity.ANUNCIOS).child(auth.getUid());
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(CriarAnuncioActivity.ANUNCIOS).child(user.getUid());
 
     private class DataListener implements ValueEventListener{
         public DataListener(){

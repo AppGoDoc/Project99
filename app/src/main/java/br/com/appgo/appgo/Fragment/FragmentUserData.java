@@ -4,14 +4,12 @@ import android.app.DialogFragment;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -20,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
-
 import br.com.appgo.appgo.Model.User;
 import br.com.appgo.appgo.R;
 
@@ -29,7 +26,7 @@ public class FragmentUserData extends DialogFragment{
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
-    private DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+mAuth.getUid());
+    private DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ user.getUid());
     private TextView edtName, edtMail, edtCell;
     private Button btnSalvar, btnCancelar, btnAlterarSenha;
     private ImageView photoUser;

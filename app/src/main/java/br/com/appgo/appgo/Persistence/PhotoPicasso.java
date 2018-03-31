@@ -3,27 +3,22 @@ package br.com.appgo.appgo.Persistence;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.widget.ImageView;
-
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import br.com.appgo.appgo.R;
 
@@ -90,7 +85,28 @@ public class PhotoPicasso {
             });
         }
     }
-    public void Photo600x400(String url, final ImageView imageView, boolean tokenA){
+    public void PhotoUser(String url, final ImageView imageView){
+        final Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.LTGRAY)
+                .borderWidthDp(1)
+                .cornerRadiusDp(15)
+                .oval(false)
+                .build();
+//        StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+//        storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+                Picasso.with(context)
+                        .load(url)
+                        .error(R.drawable.com_facebook_profile_picture_blank_square)
+                        .resize(90, 90)
+                        .transform(transformation)
+                        .centerCrop()
+                        .into(imageView);
+//            }
+//        });
+    }
+    public void PhotoBorderless(String url, final ImageView imageView, boolean tokenA){
         if (tokenA){
             StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(url);
             storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -100,7 +116,7 @@ public class PhotoPicasso {
                             .load(uri.toString())
                             .placeholder(R.drawable.ic_bar)
                             .error(R.drawable.error_image)
-                            .resize(600, 400)
+                            .resize(imageView.getWidth(), imageView.getHeight())
                             .centerCrop()
                             .into(imageView);
                 }
@@ -141,20 +157,21 @@ public class PhotoPicasso {
             });
         }
     }
-    public Uri PhotoDownload(String url, Uri uri){
-        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
-        try {
-            final File file = File.createTempFile("foto",".png");
-            reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                }
-            });
-            uri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return uri;
-    }
+//    public Bitmap PhotoDownload(String url, String name, Bitmap bitmap){
+//        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+//        try {
+//            final File file = File.createTempFile("foto",".png");
+//            reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//
+//                }
+//            });
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
 }

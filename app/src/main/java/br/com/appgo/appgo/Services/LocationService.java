@@ -1,4 +1,5 @@
 package br.com.appgo.appgo.Services;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.location.Location;
 import android.os.Bundle;
-
 import static br.com.appgo.appgo.View.MainActivity.LATITUDE_LOCATION;
 import static br.com.appgo.appgo.View.MainActivity.LOCATION_RESOURCES;
 import static br.com.appgo.appgo.View.MainActivity.LONGITUDE_LOCATION;

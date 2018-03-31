@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
-
 /**
  * Created by hex on 28/01/18.
  */

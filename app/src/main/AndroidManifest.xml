@@ -108,7 +108,15 @@
                 <action android:name="android.intent.action.VIEW"></action>
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".View.ComentActivity"
+            android:screenOrientation="portrait"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

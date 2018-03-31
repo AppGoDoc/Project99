@@ -1,7 +1,5 @@
 package br.com.appgo.appgo.Model;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 /**

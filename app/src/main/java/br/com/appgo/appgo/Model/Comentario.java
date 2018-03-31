@@ -1,5 +1,7 @@
 package br.com.appgo.appgo.Model;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**

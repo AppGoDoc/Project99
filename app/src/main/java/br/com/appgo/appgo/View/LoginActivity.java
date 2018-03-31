@@ -10,7 +10,6 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
-import java.util.List;
 import br.com.appgo.appgo.R;
 
 public class LoginActivity extends AppCompatActivity{
@@ -20,19 +19,14 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 // ...
-
-// Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build(),
-                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build());
-
-// Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
+                        .setAvailableProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.EmailBuilder().build(),
+                                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                new AuthUI.IdpConfig.FacebookBuilder().build()))
                         .setLogo(R.drawable.shop_icon)
                         .setTheme(R.style.AppTheme)
                         .build(),
@@ -49,7 +43,6 @@ public class LoginActivity extends AppCompatActivity{
 
             if (resultCode == RESULT_OK) {
                  user = FirebaseAuth.getInstance().getCurrentUser();
-                Toast.makeText(this, user.getProviders().toString(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Falha ao realizar Login...", Toast.LENGTH_SHORT).show();
             }

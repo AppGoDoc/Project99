@@ -89,8 +89,8 @@
     <string name="anuncio_premium">Anúncio Premium</string>
     <string name="sair">Sair</string>
     <string name="alterarmarcador">Se for preciso, clique segure e arraste o marcador para ajustar sua localização</string>
-    <string name="facebook_app_id">214875735742767</string>
-    <string name="fb_login_protocol_scheme">fb214875735742767</string>
+
+
     <string name="cpf_text">CPF</string>
     <string name="content_description_userphoto">userphoto</string>
     <string name="confirm_logout">Deseja realizar Logout?</string>
@@ -132,6 +132,12 @@
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB9EYaClbQjlpQPVqD91GHmFrDOLA7BH_w</string>
-    <string name="google_maps_server_key">AIzaSyC4n7no5iilHpye538Rgp_dOzkMmlBCDFE</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCmcBdRPxIndxSpTw0ZiTyDY1jdd-pmjZM</string>
+    <string name="google_maps_server_key">AIzaSyD4DTHdww_2rQliuPTPePhk_FyaVfvaM5s</string>
+    <string name="facebook_application_id" translatable="false">214875735742767</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb214875735742767</string>
+    <string name="facebook_app_id">214875735742767</string>
+    <string name="fb_login_protocol_scheme">fb214875735742767</string>
+    <string name="publicar">Publicar</string>
+    <string name="botao_denunciar">Botão para denunciar abuso de anunciante</string>
 </resources>
