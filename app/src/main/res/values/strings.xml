@@ -126,18 +126,26 @@
     SHA-1 certificate fingerprint:
     5E:C9:A1:85:9E:C2:1D:F1:36:09:96:27:85:CE:97:06:61:C0:52:F0
 
+    RELEASE SHA1
+    C5:F8:5C:4A:FC:7B:DC:A1:85:F4:DC:C7:04:14:9B:8A:B9:BA:AD:FB
+
     Alternatively, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCmcBdRPxIndxSpTw0ZiTyDY1jdd-pmjZM</string>
-    <string name="google_maps_server_key">AIzaSyD4DTHdww_2rQliuPTPePhk_FyaVfvaM5s</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCS5NSW8wos9rvVKvyHtd-k4aYu-NxxOLg</string>
+    <string name="google_maps_server_key">AIzaSyA1_n4s-zhVfMIBpdTAEFIioDujyNWUgIc</string>
     <string name="facebook_application_id" translatable="false">214875735742767</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb214875735742767</string>
     <string name="facebook_app_id">214875735742767</string>
     <string name="fb_login_protocol_scheme">fb214875735742767</string>
     <string name="publicar">Publicar</string>
     <string name="botao_denunciar">Botão para denunciar abuso de anunciante</string>
+    <string name="tipo_de_transporte">Tipo de Transporte</string>
+    <string name="title_activity_postar_anuncio">+ Inserir Anuncio</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

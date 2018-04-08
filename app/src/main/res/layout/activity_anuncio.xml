@@ -29,8 +29,10 @@
 
                 <com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
                     android:id="@+id/carroussel_fotos"
-                    android:layout_width="match_parent"
+                    android:layout_width="344dp"
                     android:layout_height="280dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
                     app:icvp_center_page_scale_offset="30dp"
                     app:icvp_interpolator="@android:anim/accelerate_decelerate_interpolator"
                     app:icvp_max_page_scale="0.8"
@@ -67,7 +69,6 @@
                     android:paddingLeft="58dp"
                     android:paddingEnd="58dp"
                     android:paddingRight="58dp"
-                    android:text="@string/ver_anuncio"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -94,15 +95,15 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_like" />
+                        app:srcCompat="@drawable/ic_like" />
 
                     <TextView
                         android:id="@+id/contagem_curtir"
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="start|center_vertical"
                         android:text="@string/_0"
-                        android:textAlignment="viewStart"
+                        android:textAlignment="center"
                         android:textColor="#000000"
                         android:textSize="24sp" />
 
@@ -111,15 +112,15 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_comment" />
+                        app:srcCompat="@drawable/ic_comment" />
 
                     <TextView
                         android:id="@+id/contagem_comentar"
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="start|center_vertical"
                         android:text="@string/_0"
-                        android:textAlignment="textStart"
+                        android:textAlignment="center"
                         android:textColor="#000000"
                         android:textSize="24sp" />
 
@@ -128,15 +129,15 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_share" />
+                        app:srcCompat="@drawable/ic_share" />
 
                     <TextView
                         android:id="@+id/contagem_share"
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="start|center_vertical"
                         android:text="@string/_0"
-                        android:textAlignment="viewStart"
+                        android:textAlignment="center"
                         android:textColor="#000000"
                         android:textSize="24sp" />
                 </LinearLayout>
@@ -177,13 +178,15 @@
                 <Button
                     android:id="@+id/anuncio_endereco"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="297dp"
+                    android:layout_width="261dp"
                     android:layout_height="51dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
                     android:gravity="center_vertical"
                     android:text="Rua jurupis do exemplo, 336"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/image_location_anuncio"
                     app:layout_constraintRight_toRightOf="parent"
@@ -204,7 +207,7 @@
             app:layout_constraintBottom_toTopOf="@+id/denuncia_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_telefone">
+            app:layout_constraintTop_toBottomOf="@+id/midias">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_ramo"
@@ -239,7 +242,7 @@
                     <Button
                         android:id="@+id/anuncio_ramo"
                         style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="297dp"
+                        android:layout_width="259dp"
                         android:layout_height="38dp"
                         android:gravity="left|center_horizontal|center"
                         android:text="Rua jurupis do exemplo, 336"
@@ -255,42 +258,52 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/image_telefone"
-            android:layout_width="65dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
-            android:padding="2dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_endereco"
-            app:srcCompat="@drawable/telefone" />
-
-        <ImageView
-            android:id="@+id/image_whatsapp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <LinearLayout
+            android:id="@+id/midias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_telefone"
-            app:layout_constraintEnd_toStartOf="@+id/image_email"
-            app:layout_constraintStart_toEndOf="@+id/image_telefone"
-            app:layout_constraintTop_toTopOf="@+id/image_telefone"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/whatsapp" />
-
-        <ImageView
-            android:id="@+id/image_email"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_whatsapp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/image_whatsapp"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/email" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_endereco">
+
+            <ImageView
+                android:id="@+id/image_telefone"
+                android:layout_width="65dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="20dp"
+                android:padding="2dp"
+                app:srcCompat="@drawable/telefone" />
+
+            <ImageView
+                android:id="@+id/image_whatsapp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="20dp"
+                app:srcCompat="@drawable/whatsapp" />
+
+            <ImageView
+                android:id="@+id/image_email"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="20dp"
+                app:srcCompat="@drawable/email" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="5dp"
+                android:src="@drawable/com_facebook_button_icon_blue" />
+
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/denuncia_button"

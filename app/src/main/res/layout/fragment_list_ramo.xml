@@ -8,7 +8,7 @@
     android:layout_marginBottom="15dp"
     android:padding="8dp"
     android:paddingBottom="10dp"
-    tools:context=".View.CriarAnuncioActivity">
+    tools:context=".view.CriarAnuncioActivity">
 
     <TextView
         android:id="@+id/textView3"
