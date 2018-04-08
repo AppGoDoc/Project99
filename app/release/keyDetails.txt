@@ -1,0 +1,36 @@
+pasta chave appgo
+    path /home/hex/AndroidStudioProjects/KeyAppGo/key_appgo.jks
+    passwd: AppGoRubenRuben
+
+    Alias: keyAppGo
+    passwd: KeyAppGo
+
+    Signature Versions V1(jar Signature)
+    
+    SHA1  C5:F8:5C:4A:FC:7B:DC:A1:85:F4:DC:C7:04:14:9B:8A:B9:BA:AD:FB
+
+    Nome do alias: keyAppGo
+    Data de criação: 03/04/2018
+    Tipo de entrada: keyEntry
+    Comprimento da cadeia de certificados: 1
+    Certificado[1]:
+    Proprietário: CN=AppGo, OU=AppGo, O=AppGo, L=Santos, ST=São Paulo, C=55
+    Emissor: CN=AppGo, OU=AppGo, O=AppGo, L=Santos, ST=São Paulo, C=55
+    Número de Série: 7d2c97b1
+    Válido a partir de: 03/04/18 00:15 até: 28/03/43 00:15
+    Impressões digitais do certificado:
+    MD5:  AD:DF:A8:21:C9:EB:A1:43:D6:67:19:81:EA:E9:52:5F
+    SHA1: C5:F8:5C:4A:FC:7B:DC:A1:85:F4:DC:C7:04:14:9B:8A:B9:BA:AD:FB
+    SHA256:          9F:EC:C1:80:68:7D:57:72:D7:6D:66:81:3F:CE:54:59:52:48:9C:0E:E1:DE:61:70:54:D8:B5:33:58:E2:F2:42
+    Nome do algoritmo de assinatura: SHA256withRSA
+	Versão: 3
+
+    Extensões: 
+
+    #1: ObjectId: 2.5.29.14 Criticality=false
+    SubjectKeyIdentifier [
+    KeyIdentifier [
+    0000: a2 01 cf 5c 80 16 57 b6  e0 cd 43 03 61 a8 c5 e2  ......W...C.a...
+    0010: 8c e3 59 5e                                        ..Y.
+    ]
+]
