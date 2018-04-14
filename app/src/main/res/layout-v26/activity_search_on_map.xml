@@ -14,71 +14,52 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         tools:context="br.com.appgo.appgo.view.SearchOnMapActivity" />
 
     <EditText
         android:id="@+id/edtTextAdress"
-        android:layout_width="275dp"
+        android:layout_width="299dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:autofillHints=""
         android:background="@drawable/bg_carregando"
         android:hint="@string/endereco"
+        android:inputType=""
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        app:layout_constraintBottom_toTopOf="@id/edtTextAdressObs"
         app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints=""
-        android:inputType="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtTextAdressObs"
-        android:layout_width="275dp"
+        android:layout_width="0dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
+        android:autofillHints=""
         android:background="@drawable/bg_carregando"
         android:hint="@string/observacao_endereco"
+        android:inputType=""
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/button2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/edtTextAdress"
-        app:layout_constraintTop_toBottomOf="@id/edtTextAdress"
-        android:autofillHints=""
-        android:inputType=""
-        android:layout_marginStart="16dp" />
-
-    <ImageButton
-        android:id="@+id/button2"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="22dp"
-        android:layout_marginRight="22dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/button_style"
-        app:srcCompat="@drawable/ic_magnifier_purple"
-        android:text="@string/button"
-        app:layout_constraintBottom_toBottomOf="@+id/edtTextAdress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/edtTextAdress"
-        app:layout_constraintTop_toTopOf="@+id/edtTextAdress"
-        android:contentDescription="TODO" />
+        app:layout_constraintTop_toBottomOf="@+id/edtTextAdress"
+        app:layout_constraintVertical_bias="0.075" />
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -110,5 +91,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.66999996"
         app:srcCompat="@drawable/ic_plus_button" />
+
+    <ImageButton
+        android:id="@+id/button2"
+        android:layout_width="49dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/button_style"
+        android:text="@string/button"
+        app:layout_constraintBottom_toBottomOf="@+id/edtTextAdress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtTextAdress"
+        app:srcCompat="@drawable/ic_magnifier_purple" />
 
 </android.support.constraint.ConstraintLayout>

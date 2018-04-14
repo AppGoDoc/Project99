@@ -17,11 +17,6 @@
         android:title="Híbrido"
         app:showAsAction="never" />
     <item
-        android:id="@+id/mapmode_none"
-        android:orderInCategory="100"
-        android:title="None"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/mapmode_terrain"
         android:orderInCategory="100"
         android:title="Terrain"

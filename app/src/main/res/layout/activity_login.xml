@@ -13,8 +13,8 @@
         style="@style/com_facebook_button"
         android:layout_width="wrap_content"
         android:layout_height="78dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/fui_idp_name_facebook"
+        android:layout_marginBottom="24dp"
+        android:text="@string/login_com_facebook"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:contentDescription="@string/logo_image"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,14 +35,35 @@
         app:srcCompat="@drawable/logo_go" />
 
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/google_signin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:drawableLeft="@android:drawable/ic_dialog_email"
+        android:drawableStart="@android:drawable/ic_dialog_email"
+        android:text="Login Com Conta Google"
         app:layout_constraintBottom_toTopOf="@+id/login_facebook"
         app:layout_constraintEnd_toEndOf="@+id/login_facebook"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/login_facebook"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+        app:layout_constraintStart_toStartOf="@+id/login_facebook" />
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:background="@color/black"
+        android:text="@string/login_com_e_mail"
+        android:textColor="@color/white"
+        android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
+        android:drawableLeft="@android:drawable/ic_dialog_email"
+        android:drawableStart="@android:drawable/ic_dialog_email"
+        app:layout_constraintBottom_toTopOf="@id/google_signin"
+        app:layout_constraintLeft_toLeftOf="@id/google_signin"
+        app:layout_constraintStart_toStartOf="@id/google_signin"
+        app:layout_constraintRight_toRightOf="@id/google_signin"
+        app:layout_constraintEnd_toEndOf="@id/google_signin" />
 
 </android.support.constraint.ConstraintLayout>

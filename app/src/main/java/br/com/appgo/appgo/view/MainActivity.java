@@ -12,6 +12,7 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG_FRAGMENT_TRANSPORT = "transport_type_fragment";
     private static final int REQUEST_LATLNG_LOJA = 12;
     public static final int RESULT_LATLNG_LOJA = 13;
+    public static final int REQUEST_LOGIN = 1819;
     public static final String LATLNG_LOJA = "loja_location";
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity
     LatLng destination = null;
     Polyline mPolyline = null;
     Rota rota = null;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,12 +162,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+            try {
+                super.finalize();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            return;
         }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Clique VOLTAR novamente para sair", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     @Override
@@ -182,9 +198,6 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.mapmode_hybrid:
                 preferences.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                break;
-            case R.id.mapmode_none:
-                preferences.setMapType(GoogleMap.MAP_TYPE_NONE);
                 break;
             case R.id.mapmode_normal:
                 preferences.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -204,30 +217,42 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        mUser = mAuth.getCurrentUser();
         int id = item.getItemId();
         switch (id) {
             case R.id.user_login:
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    DialogFragment dialogFragment = new FragmentUserData();
-                    dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
-                } else {
-                    preferences.setAtividade(null);
-                    Intent it = new Intent(getApplicationContext(), LoginActivity.class);
-                    //it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(it);
+                if (mUser != null){
+                    if (mUser.isAnonymous()){
+                        preferences.setAtividade(null);
+                        Intent it = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(it);
+                        finish();
+                    }
+                    else {
+                        // User is signed in
+                        DialogFragment dialogFragment = new FragmentUserData();
+                        dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
+                    }
+                }
+                else {
+                    finish();
                 }
                 break;
             case R.id.advertiser_tutorial:
                 break;
             case R.id.criar_loja:
-                if (mUser == null || mAuth == null){
-
-                } else {
-                    Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
-                    startActivity(criarLojaIntent);
-                    finish();
+                if (mUser != null){
+                    if (!mUser.isAnonymous()){
+                        Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
+                        startActivity(criarLojaIntent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.filtrar:
@@ -235,9 +260,17 @@ public class MainActivity extends AppCompatActivity
             case R.id.share:
                 break;
             case R.id.sair:
-                if (mAuth.getCurrentUser() != null){
-                    DialogFragment dialogFragment = new ConfirmLogout();
-                    dialogFragment.show(dialogCall(TAG_FRAGMENT_LOGOUT), TAG_FRAGMENT_LOGOUT);
+                if (mUser != null){
+                    if (!mUser.isAnonymous()){
+                        DialogFragment dialogFragment = new ConfirmLogout();
+                        dialogFragment.show(dialogCall(TAG_FRAGMENT_LOGOUT), TAG_FRAGMENT_LOGOUT);
+                    }
+                    else {
+                        Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -248,7 +281,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //mapLocation.getLastLocation(googleMap);
+        mapLocation.getLastLocation(googleMap);
     }
 
     @Override
@@ -313,6 +346,7 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
     }
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -331,7 +365,7 @@ public class MainActivity extends AppCompatActivity
     };
 
     private void CreateMarkers(ListLoja listLoja) {
-        if (listLoja != null){
+        if (listLoja != null && myMarker.isEmpty()){
             PhotoPicasso photoPicasso = new PhotoPicasso(this);
             int i = 0;
             for (Loja loja: listLoja.lojas){
@@ -348,6 +382,11 @@ public class MainActivity extends AppCompatActivity
                 i++;
             }
             googleMap.setOnMarkerClickListener(this);
+        }
+    }
+    private void DestroyMarkers(){
+        for (Marker marker: myMarker){
+            marker.remove();
         }
     }
 
@@ -373,7 +412,6 @@ public class MainActivity extends AppCompatActivity
                     }
                     DialogFragment dialogFragment = new DialogFragmentTransportType();
                     dialogFragment.show(dialogCall(TAG_FRAGMENT_TRANSPORT), TAG_FRAGMENT_TRANSPORT);
-
                 }
             }
         }

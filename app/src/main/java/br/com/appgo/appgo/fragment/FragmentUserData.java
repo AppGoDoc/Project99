@@ -26,17 +26,17 @@ public class FragmentUserData extends DialogFragment{
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
-    private DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ user.getUid());
+    private DatabaseReference userReference = null;
     private TextView edtName, edtMail, edtCell;
     private Button btnSalvar, btnCancelar, btnAlterarSenha;
     private ImageView photoUser;
-    User user1 = new User();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_dados_usuario, container, false);
 
+        GetReferenceDatabase(userReference);
         edtName = (TextView) view.findViewById(R.id.nome_usuario);
         edtMail = (TextView) view.findViewById(R.id.email_usuario);
         photoUser = (ImageView) view.findViewById(R.id.imageview_photourl);
@@ -64,7 +64,14 @@ public class FragmentUserData extends DialogFragment{
 
         return view;
     }
-
+    private void GetReferenceDatabase(DatabaseReference reference){
+        try {
+            reference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ user.getUid());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 
 

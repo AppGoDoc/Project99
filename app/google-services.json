@@ -15,21 +15,29 @@
       },
       "oauth_client": [
         {
-          "client_id": "529269687384-klcmvbhumo7eu7apkue17s5t32iva0js.apps.googleusercontent.com",
+          "client_id": "529269687384-9io3sonccg8vnv9h1ja6rnjqmm8apit8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.appgo.appgo",
-            "certificate_hash": "5ec9a1859ec21df13609962785ce970661c052f0"
+            "certificate_hash": "c5f85c4afc7bdca185f4dcc704149b8ab9baadfb"
           }
         },
         {
-          "client_id": "529269687384-kf6ala7ejrpc3g96f7h2pksl7p63g761.apps.googleusercontent.com",
+          "client_id": "529269687384-qljk4lpt2ctqislg1nnr676j0m2oh8j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.appgo.appgo",
+            "certificate_hash": "235f8f20d9f15b9bfdca62398e92fe8f97f81185"
+          }
+        },
+        {
+          "client_id": "529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBajVcZu5t4tswXgRzIiY5_LjQJZAO46iU"
+          "current_key": "AIzaSyD-CxlklHx-GyQouc4aO69Uw_W5thD43YQ"
         }
       ],
       "services": {
@@ -40,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "529269687384-kf6ala7ejrpc3g96f7h2pksl7p63g761.apps.googleusercontent.com",
+              "client_id": "529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

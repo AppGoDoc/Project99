@@ -14,12 +14,12 @@ public class Loja implements Serializable {
     public Local local;
     public Documento documento;
     public List<String> curtidas;
-    public List<Comentario> comentarios;
+    public List<Comentario> Comentario;
 
     public Loja(){
         local = new Local();
         documento = new Documento();
         curtidas = new ArrayList<>();
-        comentarios = new ArrayList<>();
+        Comentario = new ArrayList<>();
     }
 }

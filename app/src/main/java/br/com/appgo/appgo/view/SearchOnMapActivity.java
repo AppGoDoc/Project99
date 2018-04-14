@@ -46,7 +46,6 @@ import static br.com.appgo.appgo.view.CriarAnuncioActivity.ADRESS_OBS;
 import static br.com.appgo.appgo.view.CriarAnuncioActivity.RESULT_FIND_ADDRESS;
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
-
 public class SearchOnMapActivity extends FragmentActivity
         implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerDragListener{

@@ -52,9 +52,9 @@ public class ComentActivity extends AppCompatActivity implements View.OnClickLis
         Picasso.with(this)
                 .load(user.getPhotoUrl())
                 .into(imageUser);
-        loja.comentarios = fireBase.GetListComentario(
+        loja.Comentario = fireBase.GetListComentario(
                 reference.child(loja.anunciante).child("Comentario"));
-        adapterComments = new AdapterComments(loja.comentarios, getApplicationContext());
+        adapterComments = new AdapterComments(loja.Comentario, getApplicationContext());
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_comments);
         recyclerView.setHasFixedSize(true);
@@ -74,8 +74,8 @@ public class ComentActivity extends AppCompatActivity implements View.OnClickLis
                     comentario.coment = edtComment.getText().toString();
                     comentario.name = user.getDisplayName();
                     comentario.urlPhoto = user.getPhotoUrl().toString();
-                    loja.comentarios.add(comentario);
-                    reference.child(loja.anunciante).child("Comentario").setValue(loja.comentarios);
+                    loja.Comentario.add(comentario);
+                    reference.child(loja.anunciante).child("Comentario").setValue(loja.Comentario);
                     edtComment.setText("");
                 }
             }

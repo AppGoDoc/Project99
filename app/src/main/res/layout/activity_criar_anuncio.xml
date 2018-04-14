@@ -305,7 +305,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/com_facebook_button_background_color_disabled"
-            android:src="@drawable/ic_tools"
+            app:srcCompat="@drawable/ic_tools"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_anuncio_fotos" />
@@ -315,7 +315,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/com_facebook_button_background_color_disabled"
-            android:src="@drawable/ic_tools"
+            app:srcCompat="@drawable/ic_tools"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/foto1" />
@@ -325,7 +325,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/com_facebook_button_background_color_disabled"
-            android:src="@drawable/ic_tools"
+            app:srcCompat="@drawable/ic_tools"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/foto2" />
@@ -415,7 +415,7 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/foto1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/fui_done_check_mark" />
+            app:srcCompat="@drawable/ic_plus_button" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/float_foto2"
             android:layout_width="wrap_content"
@@ -426,7 +426,7 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/foto2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/fui_done_check_mark" />
+            app:srcCompat="@drawable/ic_plus_button" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/float_foto3"
             android:layout_width="wrap_content"
@@ -437,7 +437,7 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/foto3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/fui_done_check_mark" />
+            app:srcCompat="@drawable/ic_plus_button" />
 
     </android.support.constraint.ConstraintLayout>
 

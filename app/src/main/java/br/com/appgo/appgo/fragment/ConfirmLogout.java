@@ -1,6 +1,7 @@
 package br.com.appgo.appgo.fragment;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.appgo.appgo.R;
+import br.com.appgo.appgo.view.SplashScreen;
 
 /**
  * Created by hex on 21/02/18.
@@ -47,6 +49,7 @@ public class ConfirmLogout extends DialogFragment implements View.OnClickListene
             case R.id.btn_ok:
                 auth.signOut();
                 getActivity().getFragmentManager().popBackStack();
+                dismiss();
                 break;
         }
     }

@@ -7,7 +7,7 @@
     <color name="colorCalmBlue">#cbe1ff</color>
     <color name="colorBackground">#eff4fe</color>
     <color name="colorBackgroundListRamo">#ede7f6</color>
-    <color name="error">#FA8072</color>
+    <color name="error">#fa8072</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
 </resources>

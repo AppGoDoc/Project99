@@ -37,11 +37,14 @@ import java.util.List;
 import br.com.appgo.appgo.adapter.FotosAdapter;
 import br.com.appgo.appgo.controller.PermissionControl;
 import br.com.appgo.appgo.controller.UnmaskPhoneNumber;
+import br.com.appgo.appgo.model.Comentario;
 import br.com.appgo.appgo.model.Loja;
 import br.com.appgo.appgo.R;
+import br.com.appgo.appgo.persistence.FireBase;
 
 import static br.com.appgo.appgo.constants.StringConstans.CRIAR_ANUNCIO;
 import static br.com.appgo.appgo.constants.StringConstans.VER_ANUNCIO;
+import static br.com.appgo.appgo.view.CriarAnuncioActivity.ANUNCIOS;
 import static br.com.appgo.appgo.view.MainActivity.LOJA_ESCOLHIDA;
 import static br.com.appgo.appgo.view.MainActivity.LOJA_ESCOLHIDA_ACTION;
 import static br.com.appgo.appgo.view.MainActivity.RESULT_LATLNG_LOJA;
@@ -61,18 +64,22 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     Button btnEndereco, btnRamo, btnDenunciar, btnAnuncio;
     ImageView btnWhatsapp, btnTelefone, btnEmail;
     ImageButton curtir, comentar, compartilhar;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseAuth auth;
+    FirebaseUser user;
     boolean curtidaToken = false;
     String fileShare;
     Uri bitmapUri;
     Bitmap bitmap = null;
     private PermissionControl control;
+    FireBase fireBase = new FireBase(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anuncio);
 
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         loja = RequestLoja();
         urlFotos = GetListFotos(loja);
         HorizontalInfiniteCycleViewPager carroussel =
@@ -81,14 +88,15 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
         carroussel.setAdapter(fotosAdapter);
         btnAnuncio = (Button)findViewById(R.id.button_ver_anuncio);
         btnAnuncio.setOnClickListener(this);
-        btnAnuncio.setText(IsAnuncer(user.getUid()));
+        btnAnuncio.setText(IsAnuncer(GetUserUid(user)));
         btnDenunciar = (Button)findViewById(R.id.denuncia_button);
         btnDenunciar.setOnClickListener(this);
         compartilhar = (ImageButton)findViewById(R.id.compartilhar_anuncio);
         compartilhar.setOnClickListener(this);
-        comentarios = (TextView)findViewById(R.id.contagem_comentar);
         comentar = (ImageButton)findViewById(R.id.comentar_anuncio);
         comentar.setOnClickListener(this);
+        comentarios = (TextView)findViewById(R.id.cont_comment);
+        comentarios.setText(String.valueOf(getComments()));
         curtidas = (TextView)findViewById(R.id.contagem_curtir);
         curtidas.setText(String.valueOf(getCurtidas()));
         curtir = (ImageButton)findViewById(R.id.curtir_anuncio);
@@ -111,9 +119,16 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        DenunciarEnable(user);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         curtidas.setText(String.valueOf(getCurtidas()));
+        comentarios.setText(String.valueOf(getComments()));
     }
 
     @Override
@@ -130,13 +145,15 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.comentar_anuncio:
                 if (user != null){
-                    Intent comentIntent = new Intent(this, ComentActivity.class);
-                    comentIntent.putExtra(LOJA_COMENT, loja);
-                    startActivity(comentIntent);
-                }
-                else {
-                    Toast.makeText(this, "É preciso estar logado\n" +
-                            "para fazer um comentário.", Toast.LENGTH_SHORT).show();
+                    if (!user.isAnonymous()){
+                        Intent comentIntent = new Intent(this, ComentActivity.class);
+                        comentIntent.putExtra(LOJA_COMENT, loja);
+                        startActivity(comentIntent);
+                    }
+                    else {
+                        Toast.makeText(this, "É preciso estar logado\n" +
+                                "para fazer um comentário.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case R.id.anuncio_endereco:
@@ -194,10 +211,26 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
                 startActivity(it);
                 break;
             case R.id.curtir_anuncio:
-                setCurtidas();
+                if (user!=null) {
+                    if (!user.isAnonymous()) {
+                        setCurtidas();
+                    }
+                    else
+                        Toast.makeText(this, "Faça Login para ter acesso a todas " +
+                                "as funcionalidades do AppGo!", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.compartilhar_anuncio:
-                shareImage(loja.urlFoto1);
+                if (user!=null){
+                    if (!user.isAnonymous()){
+                        shareImage(loja.urlFoto1);
+                    }
+                    else {
+                        Toast.makeText(this, "Faça Login para ter acesso a todas " +
+                                "as funcionalidades do AppGo!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
                 break;
         }
     }
@@ -250,15 +283,24 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
         startActivity(Intent.createChooser(i, "Share Image"));
 
     }
-    private int getCurtidas() {
-        if (user == null){
-            curtidas.setEnabled(false);
+    private int getComments(){
+        comentar.setEnabled(false);
+        if (user != null){
+            if (!user.isAnonymous()){
+                comentar.setEnabled(true);
+            }
         }
-        else {
-            curtidas.setEnabled(true);
-            for (int i = 0; i < loja.curtidas.size(); ++i) {
-                if (loja.curtidas.get(i).equals(user.getUid())) {
-                    userAlreadyLike();
+        return loja.Comentario.size();
+    }
+    private int getCurtidas() {
+        curtidas.setEnabled(false);
+        if (user != null){
+            if (!user.isAnonymous()){
+                curtidas.setEnabled(true);
+                for (int i = 0; i < loja.curtidas.size(); ++i) {
+                    if (loja.curtidas.get(i).equals(user.getUid())) {
+                        userAlreadyLike();
+                    }
                 }
             }
         }
@@ -291,8 +333,26 @@ public class ActivityAnuncio extends AppCompatActivity implements View.OnClickLi
     private String IsAnuncer(String uid){
         if(loja.anunciante.equals(uid))
             return CRIAR_ANUNCIO;
-        else return VER_ANUNCIO;
+        else{
+            return VER_ANUNCIO;
+        }
     }
-
+    private String GetUserUid(FirebaseUser user){
+        try{
+            return user.getUid();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private void DenunciarEnable(FirebaseUser user){
+        if (user != null){
+            if (user.isAnonymous()){
+                btnDenunciar.setEnabled(false);
+                btnDenunciar.setVisibility(View.GONE);
+            }
+        }
+    }
 }
 

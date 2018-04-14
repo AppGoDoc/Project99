@@ -328,7 +328,7 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
         }
         else{
             loja.titulo = nomeAnuncio.getText().toString();
-            nomeAnuncio.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+            nomeAnuncio.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
         }
         // Pegando o Documento ligado ao anuncio
         if (documento.getText().toString().isEmpty()){
@@ -343,29 +343,29 @@ public class CriarAnuncioActivity extends AppCompatActivity implements View.OnCl
                 token = false;
             }
             else {
-                docChoose.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+                docChoose.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
                 switch (docType){
                     case "CPF":
                         if (checkDigit.eValidoCPF(documento.getText().toString())){
                             loja.documento.documento = documento.getText().toString();
-                            documento.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+                            documento.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
                             loja.documento.tipoDocumento = "CPF";
                         }
                         else {
                             message += "CPF inválido\n";
-                            documento.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+                            documento.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
                             token = false;
                         }
                         break;
                     case "CNPJ":
                         if (checkDigit.eValidoCNPJ(documento.getText().toString())){
                             loja.documento.documento = documento.getText().toString();
-                            documento.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+                            documento.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
                             loja.documento.tipoDocumento = "CNPJ";
                         }
                         else {
                             message += "CNPJ inválido\n";
-                            documento.setBackgroundColor(getResources().getColor(R.color.fui_transparent));
+                            documento.setBackgroundColor(getResources().getColor(R.color.colorCalmBlue));
                             token = false;
                         }
                         break;

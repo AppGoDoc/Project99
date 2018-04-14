@@ -89,8 +89,6 @@
     <string name="anuncio_premium">Anúncio Premium</string>
     <string name="sair">Sair</string>
     <string name="alterarmarcador">Se for preciso, clique segure e arraste o marcador para ajustar sua localização</string>
-
-
     <string name="cpf_text">CPF</string>
     <string name="content_description_userphoto">userphoto</string>
     <string name="confirm_logout">Deseja realizar Logout?</string>
@@ -111,32 +109,6 @@
     <string name="salvar_anuncio">Salvar Anúncio</string>
     <string name="ver_anuncio">VER ANÚNCIO</string>
     <string name="_0">0</string>
-    <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
-    To get one, follow this link, follow the directions and press "Create" at the end:
-
-    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=5E:C9:A1:85:9E:C2:1D:F1:36:09:96:27:85:CE:97:06:61:C0:52:F0%3Bbr.com.hex.googlemaps
-
-    You can also add your credentials to an existing key, using these values:
-
-    Package name:
-    5E:C9:A1:85:9E:C2:1D:F1:36:09:96:27:85:CE:97:06:61:C0:52:F0
-
-    SHA-1 certificate fingerprint:
-    5E:C9:A1:85:9E:C2:1D:F1:36:09:96:27:85:CE:97:06:61:C0:52:F0
-
-    RELEASE SHA1
-    C5:F8:5C:4A:FC:7B:DC:A1:85:F4:DC:C7:04:14:9B:8A:B9:BA:AD:FB
-
-    Alternatively, follow the directions here:
-    https://developers.google.com/maps/documentation/android/start#get-key
-
-    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
-    string in this file.
-    -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCS5NSW8wos9rvVKvyHtd-k4aYu-NxxOLg</string>
-    <string name="google_maps_server_key">AIzaSyA1_n4s-zhVfMIBpdTAEFIioDujyNWUgIc</string>
     <string name="facebook_application_id" translatable="false">214875735742767</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb214875735742767</string>
     <string name="facebook_app_id">214875735742767</string>
@@ -148,4 +120,20 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="button">Button</string>
+    <string name="foto">Foto</string>
+    <string name="video">Video</string>
+    <string name="seja_premium">Seja Premium</string>
+    <string name="salvar_postagem">Salvar Postagem</string>
+    <string name="login_com_facebook">Login Com Facebook</string>
+    <string name="icone_do_aplicativo">icone do aplicativo</string>
+    <string name="login_com_e_mail">Login Com e-mail</string>
+    <string name="imagem_do_comentarista">Imagem do comentarista</string>
+    <string name="foto_anuncio">Foto foto</string>
+    <string name="video_anuncio">Video Anuncio</string>
+
+    <!--&lt;!&ndash;Api Id Server Web&ndash;&gt;-->
+    <!--<string name="default_web_client_id" templateMergeStrategy="preserve" translatable="false">-->
+        <!--529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com-->
+    <!--</string>-->
 </resources>

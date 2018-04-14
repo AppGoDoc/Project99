@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio1_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio1_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio1_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio1_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio1_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio2_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio2_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio2_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio2_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio2_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio3_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio3_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio3_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio3_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio3_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio4_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio4_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio4_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio4_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio4_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio5_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio5_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio5_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio5_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio5_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio6_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio6_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio6_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio6_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio6_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/anuncio7_foto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:srcCompat="@drawable/ic_tools"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/anuncio7_text"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anuncio7_foto" />
+
+            <ImageView
+                android:id="@+id/anuncio7_button"
+                android:layout_width="91dp"
+                android:layout_height="88dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/anuncio7_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_goneMarginEnd="36dp"
+                app:srcCompat="@drawable/ic_plus_button" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/btn_salvar_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:cardBackgroundColor="@color/colorPrimary">
+            <Button
+                android:id="@+id/btn_salvar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:paddingStart="24dp"
+                android:paddingLeft="24dp"
+                android:paddingEnd="24dp"
+                android:paddingRight="24dp"
+                android:text="@string/salvar_postagem"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+
+</ScrollView>
