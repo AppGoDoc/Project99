@@ -14,13 +14,14 @@ import static br.com.appgo.appgo.view.MainActivity.LONGITUDE_LOCATION;
 
 public class LocationService extends Service {
 
-        private static final String TAG = "BOOMBOOMTESTGPS";
-        private LocationManager mLocationManager = null;
-        private static final int LOCATION_INTERVAL = 1000;
+    public static final String LOCATION_BEARING = "location_bearing";
+    private LocationManager mLocationManager = null;
+        private static final int LOCATION_INTERVAL = 2000;
         private static final float LOCATION_DISTANCE = 10f;
 
         private class LocationListener implements android.location.LocationListener {
             Location mLastLocation;
+            Float bearing;
 
             public LocationListener(String provider){
                 mLastLocation = new Location(provider);
@@ -32,7 +33,8 @@ public class LocationService extends Service {
                 if (location.getAccuracy()<15){
                     LocationDistance(location, mLastLocation);
                     mLastLocation.set(location);
-                    LocationChange(location.getLatitude(), location.getLongitude());
+                    bearing = location.getBearing();
+                    LocationChange(location.getLatitude(), location.getLongitude(), bearing);
                 }
 
             }
@@ -105,12 +107,13 @@ public class LocationService extends Service {
                 mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
             }
         }
-    private void LocationChange(double latitude, double longitude) {
+    private void LocationChange(double latitude, double longitude, float bearing) {
         try{
             Intent mIntent = new Intent();
             mIntent.setAction(LOCATION_RESOURCES);
             mIntent.putExtra(LATITUDE_LOCATION, latitude);
             mIntent.putExtra(LONGITUDE_LOCATION, longitude);
+            mIntent.putExtra(LOCATION_BEARING, bearing);
             sendBroadcast(mIntent);
         }
         catch (Exception e){
@@ -119,7 +122,7 @@ public class LocationService extends Service {
     }
     private void LocationDistance(Location location, Location mLasLocation){
         if (location != mLasLocation){
-            LocationChange(location.getLatitude(), location.getLongitude());
+            LocationChange(location.getLatitude(), location.getLongitude(), location.getBearing());
         }
     }
 }

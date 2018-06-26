@@ -12,11 +12,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
 
     <application
         android:allowBackup="true"
@@ -41,8 +41,8 @@
         <activity
             android:name=".view.SplashScreen"
             android:label="@string/appgo"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +51,7 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -62,10 +62,11 @@
         <service android:name=".services.LocationService" />
         <service android:name=".services.LoadAnunciosData" />
         <service android:name=".services.LoadMarkers" />
+        <service android:name=".services.DrivingRota" />
 
         <activity
             android:name=".view.LoginActivity"
-            android:label="LOGIN"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -103,7 +104,8 @@
         </activity>
         <activity
             android:name=".view.CriarAnuncioActivity"
-            android:label="Crie seu Anúncio"
+            android:label="Perfil da Loja no AppGo!"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
@@ -125,10 +127,70 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.PostarAnuncioActivity"
+            android:name=".view.PostarActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_postar_anuncio">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.FiltrarActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.CriarAnuncioFoto">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.VerAnuncioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.LoginEmailActivity"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.ConfigurationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter android:label="CRIAR REGISTRO">
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.TutorialActivity"
+
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.CriarAnuncioVideo"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
             </intent-filter>
         </activity>
 

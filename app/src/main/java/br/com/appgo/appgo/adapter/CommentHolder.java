@@ -13,7 +13,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
 
     public CommentHolder(View itemView) {
         super(itemView);
-        imageUser = (ImageView)itemView.findViewById(R.id.user_image);
-        comment = (TextView)itemView.findViewById(R.id.edt_coment);
+        imageUser = itemView.findViewById(R.id.user_image);
+        comment = itemView.findViewById(R.id.edt_coment);
     }
 }

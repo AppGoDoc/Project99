@@ -9,11 +9,18 @@ import android.widget.ImageView;
 
 public class ResizePhoto {
     double widht, height, resize;
+
     public ResizePhoto(int widht, int height, int resize){
         this.widht = (double) widht;
         this.height = (double) height;
         this.resize = (double) resize;
     }
+    public ResizePhoto() {
+        widht = 0;
+        height = 0;
+        resize = 0;
+    }
+
     public int widhtResize(){
         int result = (int)resize;
         return result;
@@ -22,9 +29,14 @@ public class ResizePhoto {
         int result = (int)(height/(widht/resize));
         return result;
     }
-    public Bitmap resizeBitmap(Bitmap bitmap){
-        bitmap = Bitmap.createScaledBitmap(bitmap, widhtResize(),
-                heightSize(), true);
+    public Bitmap MinimizeBitmap(Bitmap bitmap, int scale){
+        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth()/scale ,
+                bitmap.getHeight()/scale, true);
+        return bitmap;
+    }
+    public Bitmap resizeBitmap(Bitmap bitmap, int size){
+        bitmap = Bitmap.createScaledBitmap(bitmap, size,
+                size, true);
         return bitmap;
     }
     public Bitmap resizeBitmapSquare(Bitmap bitmap){
@@ -35,4 +47,5 @@ public class ResizePhoto {
         return Bitmap.createScaledBitmap(bitmap, (int) widht,
                 (int) height, true);
     }
+
 }

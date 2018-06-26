@@ -20,19 +20,6 @@ import br.com.appgo.appgo.view.CriarAnuncioActivity;
 
 public class LoadAnunciosData extends Service {
 
-    public final static String TAGZ = "BOMBOMTESTE";
-    public final static String LOJA_TITULO = "titulo_loja";
-    public final static String LOJA_ENDERECO = "endereco_loja";
-    public final static String LOJA_WHATSAPP = "whatsapp_loja";
-    public final static String LOJA_TELEFONE = "telefone_loja";
-    public final static String LOJA_EMAIL = "email_loja;";
-    public final static String LOJA_ICONE_URL = "icone_url_loja";
-    public final static String LOJA_FOTO1_URL = "foto1_url_loja";
-    public final static String LOJA_FOTO2_URL = "foto2_url_loja";
-    public final static String LOJA_FOTO3_URL = "foto3_url_loja";
-    public final static String LOJA_RAMO = "ramo_loja";
-    public final static String LOJA_TIPO_DOCUMENTO = "tipo_documento_loja";
-    public final static String LOJA_DOCUMENTO = "documento_loja";
     public static final String RECEIVER_DATA_ANUNCIO = "receive_data_anuncio";
     public static final String LOJA_RECEIVE_DATA = "loja_receive_data";
     private Loja loja = new Loja();
@@ -60,20 +47,6 @@ public class LoadAnunciosData extends Service {
             Intent mIntent = new Intent();
             mIntent.setAction(RECEIVER_DATA_ANUNCIO);
             mIntent.putExtra(LOJA_RECEIVE_DATA, loja);
-            /*
-            mIntent.putExtra(LOJA_TITULO, loja.titulo);
-            mIntent.putExtra(LOJA_ENDERECO, loja.local);
-            mIntent.putExtra(LOJA_TIPO_DOCUMENTO, loja.documento.tipoDocumento);
-            mIntent.putExtra(LOJA_DOCUMENTO, loja.documento.documento);
-            mIntent.putExtra(LOJA_WHATSAPP, loja.whatsapp);
-            mIntent.putExtra(LOJA_TELEFONE, loja.telefone);
-            mIntent.putExtra(LOJA_EMAIL, loja.emailAnuncio);
-            mIntent.putExtra(LOJA_RAMO, loja.ramo);
-            mIntent.putExtra(LOJA_ICONE_URL, loja.urlIcone);
-            mIntent.putExtra(LOJA_FOTO1_URL, loja.urlFoto1);
-            mIntent.putExtra(LOJA_FOTO2_URL, loja.urlFoto2);
-            mIntent.putExtra(LOJA_FOTO3_URL, loja.urlFoto3);
-            */
             sendBroadcast(mIntent);
         }
         catch (Exception e){

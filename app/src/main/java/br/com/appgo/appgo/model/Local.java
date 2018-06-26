@@ -12,7 +12,12 @@ public class Local implements Serializable{
     public double latitude;
     public double longitude;
 
-    public Local(){ }
+    public Local(){
+        endereco = "";
+        enderecoObservacao = "";
+        latitude = 0.0f;
+        longitude = 0.0f;
+    }
 
     public Local(String endereco, String enderecoObservacao, double latitude, double longitude) {
         this.endereco = endereco;

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "529269687384-lifjoh84riobpt0ribiij01l4gd2bvqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.appgo.appgo",
+            "certificate_hash": "3abbaa6a7456e15b8a419bed6acb082005510de0"
+          }
+        },
+        {
           "client_id": "529269687384-9io3sonccg8vnv9h1ja6rnjqmm8apit8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,6 +44,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyCmyziwOoaR9ALDSZpXQ0hLFBl-i6Y_3sA"
+        },
         {
           "current_key": "AIzaSyD-CxlklHx-GyQouc4aO69Uw_W5thD43YQ"
         }

@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,54 +25,82 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
 import org.apache.commons.lang3.SerializationUtils;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import br.com.appgo.appgo.fragment.DialogFragmentTransportType;
-import br.com.appgo.appgo.maps.MapLocation;
-import br.com.appgo.appgo.maps.Rota;
-import br.com.appgo.appgo.model.Local;
-import br.com.appgo.appgo.persistence.PhotoPicasso;
+
+import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.controller.SPreferences;
 import br.com.appgo.appgo.fragment.ConfirmLogout;
+import br.com.appgo.appgo.fragment.DialogFragmentTransportType;
 import br.com.appgo.appgo.fragment.FragmentUserData;
+import br.com.appgo.appgo.maps.CreateLatLngBounds;
+import br.com.appgo.appgo.maps.MapLocation;
+import br.com.appgo.appgo.maps.Rota;
 import br.com.appgo.appgo.model.ListLoja;
+import br.com.appgo.appgo.model.Local;
 import br.com.appgo.appgo.model.Loja;
-import br.com.appgo.appgo.R;
-import br.com.appgo.appgo.services.LoadMarkers;
+import br.com.appgo.appgo.persistence.PhotoPicasso;
+import br.com.appgo.appgo.persistence.ShareImage;
 import br.com.appgo.appgo.services.LocationService;
-import static br.com.appgo.appgo.constants.StringConstans.ACTION_RECEIVE_MARKER;
-import static br.com.appgo.appgo.constants.StringConstans.LOJAS_LIST_RECEIVE;
+
+import static br.com.appgo.appgo.constants.StringConstans.YOUR_ADMOB_APP_ID;
+import static br.com.appgo.appgo.services.LocationService.LOCATION_BEARING;
 import static br.com.appgo.appgo.view.ActivityAnuncio.LATITUDE_LOJA;
+import static br.com.appgo.appgo.view.ActivityAnuncio.USER_LOJA;
+import static br.com.appgo.appgo.view.ActivityAnuncio.USER_LOJA_ACTION;
+import static br.com.appgo.appgo.view.FiltrarActivity.RADIUS_SEARCH;
+import static br.com.appgo.appgo.view.FiltrarActivity.RAMO_SEARCH;
+import static br.com.appgo.appgo.view.FiltrarActivity.RESULT_RESET_SEARCH;
+import static br.com.appgo.appgo.view.FiltrarActivity.RESULT_SEARCH_FILTER;
+import static br.com.appgo.appgo.view.SplashScreen.LIST_LOJA_ACTION;
+import static br.com.appgo.appgo.view.SplashScreen.LIST_LOJA_PACK;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, ServiceConnection,
-        GoogleMap.OnMarkerClickListener, DialogFragmentTransportType.ChooseTransportTypeDialogListener {
-
-    private static final int REQUEST_ERRO_PLAY_SERVICES = 1;
+        GoogleMap.OnInfoWindowClickListener, DialogFragmentTransportType.ChooseTransportTypeDialogListener,
+        View.OnClickListener{
+    private AdView mAdView;
+    public static final int REQUEST_ERRO_PLAY_SERVICES = 1;
+    public static final int REQUEST_CONFIG = 11;
+    public static final int RESULT_CONFIG_SAVE = 12;
+    public static final String TAXI_STRING = "Serviço Taxí";
     private static final String TAG_FRAGMENT = "UserOptionFragment";
     private static final String TAG_FRAGMENT_LOGOUT = "DialogFragmentConfirmLogout";
     public static final String LOCATION_RESOURCES = "location.resources";
     public static final String LATITUDE_LOCATION = "latitude";
     public static final String LONGITUDE_LOCATION = "longitude";
     private static final String TAG_FRAGMENT_USERDATA = "fragment_dialog_userdata";
+    private static final String CLICK_VER_ANUNCIO = "Clique para ver o anúncio.";
     public static final String LOJA_ESCOLHIDA = "loja_escolhida";
     public static final String LOJA_ESCOLHIDA_ACTION = "loja_escolhida_action";
     private static final String TAG_FRAGMENT_TRANSPORT = "transport_type_fragment";
@@ -81,84 +108,86 @@ public class MainActivity extends AppCompatActivity
     public static final int RESULT_LATLNG_LOJA = 13;
     public static final int REQUEST_LOGIN = 1819;
     public static final String LATLNG_LOJA = "loja_location";
+    private static final int REQUEST_FILTER_SEARCH = 1514;
+    private static final String ROTA_PARCEL = "rota_parcelable";
+    public static final String LIST_LOJA_ACTION_CONFIG = "list_loja_action_config";
+    public static final String LIST_LOJA_PACK_CONFIG = "list_loja_pack_config";
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     MapLocation mapLocation;
-    private FloatingActionButton floatingActionButton;
     private SPreferences preferences;
-    private IntentFilter intentFilter, intentFilterMarker;
-    private Intent serviceIntent, serviceIntentMarker;
+    private IntentFilter intentFilter, intentFilterRota;
+    private Intent serviceIntent, serviceRota;
     private FirebaseAuth mAuth = null;
     private FirebaseUser mUser = null;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private List<Polyline> polylineList;
     ListLoja listLoja = null;
     List<Marker> myMarker = new LinkedList<>();
     LatLng myLocation = null;
     LatLng destination = null;
-    Polyline mPolyline = null;
     Rota rota = null;
+    private float bearing = 0;
     boolean doubleBackToExitPressedOnce = false;
+    NavigationView navigationView;
+    private ImageView mUserImage, mBtnTaxi, mResetFiltro, mSearchOnMap, floatingActionButton;
+    TextView mUserName;
+    int sizeIcon = 0;
+    String transportType;
+    private boolean mTaxiBtnEnabled, mFilterToken;
+    ProgressBar mProgressMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Shared Preferences archive to save configs
+
+        mFilterToken = false;
         preferences = new SPreferences(getApplicationContext());
+        sizeIcon = preferences.GetIntShared();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         floatingActionButton = findViewById(R.id.floatteste);
+        floatingActionButton.setOnClickListener(this);
         FloatButtonRota(false);
+        mResetFiltro = findViewById(R.id.img_filtro);
+        mResetFiltro.setOnClickListener(this);
         //Calling the view components.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //Calling Maps components
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         fragment.getMapAsync(this);
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        intentFilterMarker = new IntentFilter();
-        intentFilterMarker.addAction(ACTION_RECEIVE_MARKER);
-        serviceIntentMarker = new Intent(this, LoadMarkers.class);
+
         intentFilter = new IntentFilter();
         intentFilter.addAction(LOCATION_RESOURCES);
         serviceIntent = new Intent(this, LocationService.class);
-        startService(serviceIntentMarker);
-        registerReceiver(mBroadcastReceiver, intentFilterMarker);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rota.removePolyline();
-                FloatButtonRota(false);
-            }
-        });
+        listLoja = RequestListLoja();
+        mBtnTaxi = findViewById(R.id.btn_taxi);
+        mBtnTaxi.setOnClickListener(this);
+        mTaxiBtnEnabled = false;
+        mSearchOnMap = findViewById(R.id.search_onmap);
+        mSearchOnMap.setOnClickListener(this);
+        mProgressMarkers = findViewById(R.id.progress_itens);
+        MobileAds.initialize(this, YOUR_ADMOB_APP_ID);
+        mAdView = findViewById(R.id.banner);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
-
-    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction() == ACTION_RECEIVE_MARKER){
-                byte[] data = intent.getByteArrayExtra(LOJAS_LIST_RECEIVE);
-                ListLoja listTemp = SerializationUtils.deserialize(data);
-                if (listLoja != listTemp){
-                    listLoja = listTemp;
-                    CreateMarkers(listLoja);
-                }
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -187,7 +216,33 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        mUserImage = findViewById(R.id.image_logo_menu);
+        mUserName = findViewById(R.id.nome_usuario);
+        getUserName(mUserName,mUserImage);
         return true;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getUserName(mUserName, mUserImage);
+    }
+
+    private void hideItens(NavigationView view) {
+        Menu nav_menu = view.getMenu();
+        if (mUser==null||mUser.isAnonymous()){
+            nav_menu.findItem(R.id.user_login).setVisible(true);
+            nav_menu.findItem(R.id.criar_loja).setVisible(false);
+            nav_menu.findItem(R.id.criar_anuncio).setVisible(false);
+            nav_menu.findItem(R.id.sair).setVisible(false);
+        }
+        else{
+            getUserName(mUserName,mUserImage);
+            nav_menu.findItem(R.id.user_login).setVisible(false);
+            nav_menu.findItem(R.id.criar_loja).setVisible(true);
+            nav_menu.findItem(R.id.criar_anuncio).setVisible(true);
+            nav_menu.findItem(R.id.sair).setVisible(true);
+        }
     }
 
     @Override
@@ -218,65 +273,49 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         mUser = mAuth.getCurrentUser();
+
         int id = item.getItemId();
         switch (id) {
-            case R.id.user_login:
-                if (mUser != null){
-                    if (mUser.isAnonymous()){
-                        preferences.setAtividade(null);
-                        Intent it = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(it);
-                        finish();
-                    }
-                    else {
-                        // User is signed in
-                        DialogFragment dialogFragment = new FragmentUserData();
-                        dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
-                    }
-                }
-                else {
-                    finish();
-                }
+            case R.id.user_login: LoginProcedure();
                 break;
-            case R.id.advertiser_tutorial:
+            case R.id.advertiser_tutorial: TutorialProcedure();
                 break;
-            case R.id.criar_loja:
-                if (mUser != null){
-                    if (!mUser.isAnonymous()){
-                        Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
-                        startActivity(criarLojaIntent);
-                        finish();
-                    }
-                    else{
-                        Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
-                }
+            case R.id.config: Configuration();
                 break;
-            case R.id.filtrar:
+            case R.id.criar_loja: CreateStore();
                 break;
-            case R.id.share:
+            case R.id.criar_anuncio: CriarAnuncio();
                 break;
-            case R.id.sair:
-                if (mUser != null){
-                    if (!mUser.isAnonymous()){
-                        DialogFragment dialogFragment = new ConfirmLogout();
-                        dialogFragment.show(dialogCall(TAG_FRAGMENT_LOGOUT), TAG_FRAGMENT_LOGOUT);
-                    }
-                    else {
-                        Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
-                }
+            case R.id.filtrar: FilterProcedure();
+                break;
+            case R.id.share: ShareAppGo();
+                break;
+            case R.id.sair: ExitProcedure();
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void CriarAnuncio() {
+        boolean tokenVerifiedUserCreateStore = false;
+        if (listLoja != null && !mUser.isAnonymous() && mUser!= null){
+            for (Loja loja: listLoja.lojas){
+                if (loja.anunciante.equals(mUser.getUid())){
+                    tokenVerifiedUserCreateStore = true;
+                    Intent postarAnuncio = new Intent(getApplicationContext(), PostarActivity.class);
+                    postarAnuncio.setAction(USER_LOJA_ACTION);
+                    byte[] data = SerializationUtils.serialize(loja);
+                    postarAnuncio.putExtra(USER_LOJA, data);
+                    startActivity(postarAnuncio);
+                }
+            }
+            if (!tokenVerifiedUserCreateStore){
+                Toast.makeText(this, "Você precisa criar o perfil da sua loja no AppGo! " +
+                        "para poder postar seus anúncios", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -310,16 +349,29 @@ public class MainActivity extends AppCompatActivity
         mapLocation.GoogleMapOptionsSettings(googleMap, preferences.getMapType());
         mapLocation.getLastLocation(googleMap);
         this.googleMap = googleMap;
+        if (listLoja != null){
+            CreateMarkers(listLoja);
+        }
     }
     @Override
     public void onFinishDialogFragment(String transportType) {
-        rota.CreateRota(myLocation, destination, transportType);
-        FloatButtonRota(true);
+        if (myLocation == null){
+            Toast.makeText(this, "Impossível criar rota, seu apareho apresenta" +
+                    "problemas no envio de sua localização.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            this.transportType = transportType;
+            polylineList = rota.CreateRota(myLocation, destination, transportType);
+            FloatButtonRota(true);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        startService(serviceIntent);
+        registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
@@ -328,67 +380,150 @@ public class MainActivity extends AppCompatActivity
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        unregisterReceiver(mReceiver);
+        stopService(serviceIntent);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
-        stopService(serviceIntent);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startService(serviceIntent);
-        registerReceiver(mReceiver, intentFilter);
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        hideItens(navigationView);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            double latitude = 0f;
-            double longitude = 0f;
-            if (intent.getAction() == LOCATION_RESOURCES){
+            String action = intent.getAction();
+            if (intent.getAction().equals(LOCATION_RESOURCES)&&destination!=null){
                 myLocation = new LatLng(
-                        (Double) intent.getDoubleExtra(LATITUDE_LOCATION, 0),
-                        (Double) intent.getDoubleExtra(LONGITUDE_LOCATION, 0)
+                        intent.getDoubleExtra(LATITUDE_LOCATION, 0),
+                        intent.getDoubleExtra(LONGITUDE_LOCATION, 0)
+                );
+                bearing = intent.getFloatExtra(LOCATION_BEARING, 90);
+                mapLocation.atualizarMapa(googleMap, myLocation, bearing, 17.0f);
+
+            }
+            if (intent.getAction().equals(LOCATION_RESOURCES)&&destination==null){
+                myLocation = new LatLng(
+                        intent.getDoubleExtra(LATITUDE_LOCATION, 0),
+                        intent.getDoubleExtra(LONGITUDE_LOCATION, 0)
                 );
                 mapLocation.atualizarMapa(googleMap, myLocation);
-                mapLocation.getLastLocation(googleMap);
-
             }
         }
     };
+//    private void ConsumePolyline(LatLng latLng){
+//        boolean token = false;
+//        if (polylineList==null||polylineList.isEmpty()){
+//            return;
+//        }
+//        else {
+//            for (int i=0;i<polylineList.size();i++){
+//                List<LatLng> points = polylineList.get(i).getPoints();
+//                for (int i=0;i<points.size();i++){
+//                    if (points.get(i).equals(latLng)){
+//                        token = true;
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void CreateMarkers(ListLoja listLoja) {
-        if (listLoja != null && myMarker.isEmpty()){
-            PhotoPicasso photoPicasso = new PhotoPicasso(this);
-            int i = 0;
-            for (Loja loja: listLoja.lojas){
-                LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
-                ImageView imageView = new ImageView(this);
-                photoPicasso.Photo18x18(loja.urlIcone, imageView, true);
-                myMarker.add(
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(loja.titulo)
-                                .snippet(loja.local.endereco))
-                );
-                photoPicasso.PhotoMarkerDownload(loja.urlIcone, myMarker.get(i));
-                i++;
+        try{
+            ProgressMarkers(true);
+            myMarker = new ArrayList<>();
+            googleMap.clear();
+            if (listLoja != null && myMarker.isEmpty()){
+                PhotoPicasso photoPicasso = new PhotoPicasso(this);
+                int i = 0;
+                for (Loja loja: listLoja.lojas){
+                    LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
+                    myMarker.add(
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(loja.titulo)
+                                    .snippet(loja.local.endereco)
+                                    .icon(BitmapDescriptorFactory.defaultMarker()))
+                    );
+                    photoPicasso.PhotoMarkerDownload(loja.urlIcone, myMarker.get(i), sizeIcon);
+                    i++;
+                }
+                googleMap.setOnInfoWindowClickListener(this);
             }
-            googleMap.setOnMarkerClickListener(this);
+            ProgressMarkers(false);
+        } catch (Exception e){
+            e.printStackTrace();
         }
+
     }
-    private void DestroyMarkers(){
-        for (Marker marker: myMarker){
-            marker.remove();
+    private void CreateMarkersFilter(ListLoja listLoja, String filter, double kilometers) {
+        ProgressMarkers(true);
+        myMarker = new ArrayList<>();
+        googleMap.clear();
+        LatLng myLatlng = getMyLocation();
+        if (listLoja != null && myMarker.isEmpty()){
+            CreateLatLngBounds bounds = new CreateLatLngBounds(myLatlng, kilometers);
+            try{
+                PhotoPicasso photoPicasso = new PhotoPicasso(this);
+                int i = 0;
+                for (Loja loja: listLoja.lojas){
+                    LatLng storeLatlng = new LatLng(loja.local.latitude, loja.local.longitude);
+                    if ((loja.ramo.toLowerCase().equals(filter.toLowerCase()) ||
+                            filter.toLowerCase().equals("escolha o tipo de ramo"))
+                        && bounds.getBounds().contains(storeLatlng)){
+                        LatLng latLng = new LatLng(loja.local.latitude, loja.local.longitude);
+                        myMarker.add(
+                                googleMap.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title(loja.titulo)
+                                        .snippet(loja.local.endereco)
+                                        .icon(BitmapDescriptorFactory.defaultMarker()))
+                        );
+                        photoPicasso.PhotoMarkerDownload(loja.urlIcone, myMarker.get(i), sizeIcon);
+                        i++;
+                    }
+                }
+                googleMap.setOnInfoWindowClickListener(this);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(this, "Erro" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
+        else {
+            Toast.makeText(this, "Falha na requisição da localização do aparelho, " +
+                    "cheque o estado das configurações de localização e tente novamente", Toast.LENGTH_SHORT).show();
+        }
+        ProgressMarkers(false);
     }
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        if (rota!=null){
+//            outState.putSerializable(ROTA_PARCEL, rota);
+//            outState.putParcelable("position", myLocation);
+//            outState.putParcelable("destination", destination);
+//            outState.putSerializable("transport", transportType);
+//
+//        }
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        rota = (Rota) savedInstanceState.getSerializable(ROTA_PARCEL);
+//        myLocation = savedInstanceState.getParcelable("position");
+//        destination = savedInstanceState.getParcelable("destination");
+//        transportType = (String) savedInstanceState.getSerializable("transport");
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -398,23 +533,53 @@ public class MainActivity extends AppCompatActivity
         }
         if (requestCode == REQUEST_LATLNG_LOJA) {
             if (resultCode == RESULT_LATLNG_LOJA) {
-                Local tmpLocal = (Local) data.getSerializableExtra(LATITUDE_LOJA);
-                destination = new LatLng(tmpLocal.latitude, tmpLocal.longitude);
-                myLocation = new LatLng(
-                        googleMap.getMyLocation().getLatitude(),
-                        googleMap.getMyLocation().getLongitude()
-                );
-                if (myLocation!=null && destination!=null){
-                    if (rota == null){
-                        rota = new Rota(googleMap, this, getResources().getString(R.string.google_maps_server_key));
-                    } else{
-                        rota.removePolyline();
+                try {
+                    Local tmpLocal = (Local) data.getSerializableExtra(LATITUDE_LOJA);
+                    destination = new LatLng(tmpLocal.latitude, tmpLocal.longitude);
+                    myLocation = new LatLng(
+                            googleMap.getMyLocation().getLatitude(),
+                            googleMap.getMyLocation().getLongitude()
+                    );
+                    if (myLocation!=null && destination!=null){
+                        if (rota == null){
+                            rota = new Rota(googleMap, this, getResources().getString(R.string.google_maps_server_key));
+                        } else{
+                            rota.removePolyline();
+                        }
+                        DialogFragment dialogFragment = new DialogFragmentTransportType();
+                        dialogFragment.show(dialogCall(TAG_FRAGMENT_TRANSPORT), TAG_FRAGMENT_TRANSPORT);
                     }
-                    DialogFragment dialogFragment = new DialogFragmentTransportType();
-                    dialogFragment.show(dialogCall(TAG_FRAGMENT_TRANSPORT), TAG_FRAGMENT_TRANSPORT);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(this, "Falha ao criar Rota, tente novamente.", Toast.LENGTH_SHORT).show();
                 }
+
             }
         }
+        if (requestCode == REQUEST_FILTER_SEARCH){
+            if (resultCode == RESULT_SEARCH_FILTER){
+                String ramo = data.getStringExtra(RAMO_SEARCH);
+                Double raio = Double.parseDouble(data.getStringExtra(RADIUS_SEARCH));
+                CreateMarkersFilter(listLoja, ramo, raio*1000);
+                FilterEnabled(true);
+            }
+            if (resultCode == RESULT_RESET_SEARCH){
+                CreateMarkers(listLoja);
+                mResetFiltro.setVisibility(View.GONE);
+                mResetFiltro.setEnabled(false);
+            }
+        }
+        if (requestCode == REQUEST_CONFIG){
+            if (sizeIcon != preferences.GetIntShared()){
+                sizeIcon = preferences.GetIntShared();
+                CreateMarkers(listLoja);
+            }
+            if (resultCode == RESULT_OK){
+                hideItens(navigationView);
+                getUserName(mUserName, mUserImage);
+            }
+        }
+
     }
 
     @Override
@@ -442,9 +607,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        //googleMap.clear();
+    public void onInfoWindowClick(Marker marker) {
         if (marker != null){
+            FloatButtonResetRota();
             LatLng latLng = marker.getPosition();
             for (Loja loja: listLoja.lojas){
                 if (loja.local.latitude == latLng.latitude &&
@@ -457,14 +622,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-        return false;
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mBroadcastReceiver);
-        stopService(serviceIntentMarker);
+
     }
     public void FloatButtonRota(boolean token){
         if (token){
@@ -474,6 +638,190 @@ public class MainActivity extends AppCompatActivity
         else{
             floatingActionButton.setClickable(false);
             floatingActionButton.setVisibility(View.GONE);
+        }
+    }
+    private void getUserName(TextView textView, ImageView imageView){
+        if (mUser != null){
+            if (!mUser.isAnonymous()){
+                if (textView != null && imageView != null){
+                    textView.setText(mUser.getDisplayName());
+                    Picasso.with(this)
+                            .load(mUser.getPhotoUrl())
+                            .fit()
+                            .into(imageView);
+                }
+            }
+        }
+    }
+    private void ShareAppGo(){
+        try {
+            new ShareImage(
+                    this,
+                    "Baixe Já o App Go!",
+                    "https://firebasestorage.googleapis.com/v0/b/appgo-1517155420414.appspot.com/o/documents%2Flogo_appgo.png?alt=media&token=f73de093-c3c6-4afc-b3e1-9ad9cb20c6db",
+                    "Baixe o já o AppGo!\nhttps://play.google.com/store/apps/details?id=br.com.appgo.appgo"
+                    );
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private LatLng getMyLocation(){
+        LatLng latLng = new LatLng(
+                googleMap.getMyLocation().getLatitude(),
+                googleMap.getMyLocation().getLongitude()
+        );
+        if (latLng == null){
+            latLng = myLocation;
+        }
+        return latLng;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.search_onmap:
+
+                break;
+            case R.id.floatteste:
+                FloatButtonResetRota();
+                break;
+            case R.id.img_filtro:
+                if (mFilterToken){
+                    CreateMarkers(listLoja);
+                    FilterEnabled(false);
+                }
+                else{
+                    FilterProcedure();
+                }
+                break;
+            case R.id.btn_taxi:
+                try {
+                    if (mTaxiBtnEnabled == false){
+                        mTaxiBtnEnabled = true;
+                        CreateMarkersFilter(listLoja, TAXI_STRING, 50000f);
+                        mBtnTaxi.setImageDrawable(getResources().getDrawable(R.drawable.ic_btn_taxi_negativo));
+                    }
+                    else{
+                        mTaxiBtnEnabled = false;
+                        mBtnTaxi.setImageDrawable(getResources().getDrawable(R.drawable.ic_btn_taxi));
+                        CreateMarkers(listLoja);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
+    private void FloatButtonResetRota() {
+        if (destination!=null){
+            rota.removePolyline();
+            rota =null;
+            destination = null;
+            FloatButtonRota(false);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
+    private void CreateStore(){
+        if (mUser != null){
+            if (!mUser.isAnonymous()){
+                Intent criarLojaIntent = new Intent(this, CriarAnuncioActivity.class);
+                startActivity(criarLojaIntent);
+            }
+            else{
+                Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(this, "Você precisa estar Logado para criar um anúncio.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void Configuration(){
+        Intent configApp = new Intent(this, ConfigurationActivity.class);
+        configApp.setAction(LIST_LOJA_ACTION_CONFIG);
+        byte[] data = SerializationUtils.serialize(listLoja);
+        configApp.putExtra(LIST_LOJA_PACK_CONFIG, data);
+        startActivityForResult(configApp, REQUEST_CONFIG);
+    }
+    private void LoginProcedure() {
+        if (mUser != null){
+            if (mUser.isAnonymous()){
+                preferences.setAtividade(null);
+                Intent it = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(it);
+                finish();
+            }
+            else {
+                // User is signed in
+                DialogFragment dialogFragment = new FragmentUserData();
+                dialogFragment.show(dialogCall(TAG_FRAGMENT_USERDATA), TAG_FRAGMENT_USERDATA);
+            }
+        }
+        else {
+            finish();
+        }
+    }
+    private void FilterProcedure() {
+        Intent filtrarIntent = new Intent(this, FiltrarActivity.class);
+        startActivityForResult(filtrarIntent, REQUEST_FILTER_SEARCH);
+    }
+    private void TutorialProcedure() {
+        Intent tutorialIntent = new Intent(this, TutorialActivity.class);
+        startActivity(tutorialIntent);
+    }
+    private void ExitProcedure() {
+        if (mUser != null){
+            if (!mUser.isAnonymous()){
+                DialogFragment dialogFragment = new ConfirmLogout();
+                dialogFragment.show(dialogCall(TAG_FRAGMENT_LOGOUT), TAG_FRAGMENT_LOGOUT);
+            }
+            else {
+                Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(this, "Não existe usuário Logado no sistema.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private ListLoja RequestListLoja() {
+        ListLoja listLoja = null;
+        Intent intent = getIntent();
+        if (intent.getAction().equals(LIST_LOJA_ACTION)){
+            byte[] data = intent.getByteArrayExtra(LIST_LOJA_PACK);
+            listLoja = SerializationUtils.deserialize(data);
+        }
+        return listLoja;
+    }
+    private void updateCameraBearing(GoogleMap googleMap, float bearing) {
+        if ( googleMap == null) return;
+        CameraPosition camPos = CameraPosition
+                .builder(
+                        googleMap.getCameraPosition() // current Camera
+                )
+                .bearing(bearing)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+    }
+    private void ProgressMarkers(boolean token){
+        if (token){
+            mProgressMarkers.setVisibility(View.VISIBLE);
+            mBtnTaxi.setEnabled(false);
+        }
+        else {
+            mProgressMarkers.setVisibility(View.GONE);
+            mBtnTaxi.setEnabled(true);
+        }
+    }
+    private void FilterEnabled(boolean token){
+        if (token){
+            mFilterToken = true;
+            mResetFiltro.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_neg));
+        }
+        else{
+            mFilterToken = false;
+            mResetFiltro.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_pos));
         }
     }
 }

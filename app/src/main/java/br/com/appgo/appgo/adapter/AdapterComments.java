@@ -3,6 +3,7 @@ package br.com.appgo.appgo.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import java.util.List;
@@ -27,9 +28,9 @@ public class AdapterComments extends RecyclerView.Adapter<CommentHolder> {
 
     @Override
     public void onBindViewHolder(CommentHolder holder, int position) {
-        holder.comment.setText(String.format("%s\n\n%s"
-                ,comentarios.get(position).name
-                ,comentarios.get(position).coment));
+        String stringComent = "<strong>" + comentarios.get(position).name + "</strong><br><br>" +
+                        "<em>" + comentarios.get(position).coment + "</em>";
+        holder.comment.setText(Html.fromHtml(stringComent));
         PhotoPicasso picasso = new PhotoPicasso(context);
         picasso.PhotoUser(comentarios.get(position).urlPhoto, holder.imageUser);
     }

@@ -10,15 +10,13 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.PrintStream;
-
-import static com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition;
 import static com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom;
 
 public class MapLocation {
@@ -55,21 +53,30 @@ public class MapLocation {
                                 setMyLocationMarke(googleMap);
                             }
                             else{
-                                Toast.makeText(context, "Location nao funfa", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Falha nas requisições do Google Maps, " +
+                                        "cheque suas permissões para localização e internet.", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });
         }
     }
 
-    public void atualizarMapa(GoogleMap googleMap, LatLng myLocation) {
-//        googleMap.animateCamera(newLatLngZoom(myLocation, 15.0f));
+    public void atualizarMapa(GoogleMap googleMap, LatLng myLocation, float bearing, float zoom) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(myLocation)
-                .zoom(15)
-                .bearing(90)
+                .zoom(zoom)
+                .bearing(bearing)
                 .build();
-        googleMap.animateCamera(newCameraPosition(cameraPosition));
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+    public void atualizarMapa(GoogleMap googleMap, LatLng myLocation) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(myLocation)
+                .zoom(14.0f)
+//                .bearing(bearing)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     public void setMyLocationMarke(GoogleMap googleMap) {
@@ -77,14 +84,15 @@ public class MapLocation {
             new CameraPosition.Builder()
                     .target(latLng)
                     .zoom(14)
-                    .bearing(90)
+//                    .bearing(90)
                     .build();
     }
 
     public void GoogleMapOptionsSettings(GoogleMap googleMap, int maptype) {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        googleMap.isTrafficEnabled();
+        googleMap.setBuildingsEnabled(false);
+        googleMap.setTrafficEnabled(false);
         googleMap.setMapType(maptype);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

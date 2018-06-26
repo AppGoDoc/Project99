@@ -11,7 +11,7 @@ public class TextFildCheck {
     public boolean CheckName(String Name){
         boolean token = false;
         if (!Name.isEmpty()){
-            if (Name.length() > 4){
+            if (Name.length() > 2){
                 token = true;
             }
         }

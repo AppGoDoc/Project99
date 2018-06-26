@@ -5,5 +5,10 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="margin_register_activity">10dp</dimen>
+    <dimen name="size_icon_route_select">60dp</dimen>
+    <dimen name="padding_icon_route_select">4dp</dimen>
+    <dimen name="margin_text_icon_route_select">24dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="toolbar_margin_right">8dp</dimen>
+    <dimen name="subtitle_font_size">18sp</dimen>
 </resources>

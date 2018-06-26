@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+
+    <group>
         <item
             android:id="@+id/filtrar"
             android:icon="@drawable/ic_magnifier"
-            android:title="Filtrar Busca" />
+            android:title="@string/filtrar_busca" />
         <item
             android:id="@+id/share"
             android:icon="@drawable/ic_menu_share"
-            android:title="Compartilhe" />
+            android:title="@string/compartilhe" />
         <item
             android:id="@+id/config"
             android:icon="@drawable/ic_build_black_24dp"
-            android:title="Configuração" />
+            android:title="@string/configura_o" />
     </group>
-
-    <item android:title="Seja Anunciante">
-        <menu>
-            <item
-                android:id="@+id/user_login"
-                android:icon="@drawable/ic_user"
-                android:title="Login" />
-            <item
-                android:id="@+id/criar_loja"
-                android:icon="@drawable/ic_user"
-                android:title="Criar Anúncio" />
-            <item
-                android:id="@+id/advertiser_tutorial"
-                android:icon="@drawable/ic_question_mark"
-                android:title="Tutorial" />
-            <item
-                android:id="@+id/sair"
-                android:icon="@drawable/ic_user"
-                android:title="Sair" />
-
-        </menu>
-    </item>
-
+    <group>
+        <item
+            android:id="@+id/user_login"
+            android:icon="@drawable/ic_user"
+            android:title="@string/login_appgo" />
+        <item
+            android:id="@+id/criar_loja"
+            android:icon="@drawable/ic_store"
+            android:title="@string/perfil_da_loja" />
+        <item
+            android:id="@+id/criar_anuncio"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/criar_anuncio" />
+        <item
+            android:id="@+id/advertiser_tutorial"
+            android:icon="@drawable/ic_question_mark"
+            android:title="@string/tutorial" />
+        <item
+            android:id="@+id/sair"
+            android:icon="@drawable/ic_arrow"
+            android:title="@string/sair" />
+    </group>
 </menu>

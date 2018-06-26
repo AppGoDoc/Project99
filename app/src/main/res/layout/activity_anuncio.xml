@@ -7,9 +7,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        android:paddingBottom="8dp">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground" >
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_foto"
@@ -27,19 +26,30 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="8dp">
 
-                <com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
-                    android:id="@+id/carroussel_fotos"
-                    android:layout_width="344dp"
-                    android:layout_height="280dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginRight="24dp"
-                    app:icvp_center_page_scale_offset="30dp"
-                    app:icvp_interpolator="@android:anim/accelerate_decelerate_interpolator"
-                    app:icvp_max_page_scale="0.8"
-                    app:icvp_medium_scaled="false"
-                    app:icvp_min_page_scale="0.55"
-                    app:icvp_min_page_scale_offset="5dp"
-                    app:icvp_scroll_duration="250"
+                <!--<com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager-->
+                    <!--android:id="@+id/carroussel_fotos_loja"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="300dp"-->
+                    <!--android:layout_marginStart="8dp"-->
+                    <!--android:layout_marginLeft="8dp"-->
+                    <!--android:layout_marginEnd="8dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--app:icvp_center_page_scale_offset="30dp"-->
+                    <!--app:icvp_interpolator="@android:anim/accelerate_decelerate_interpolator"-->
+                    <!--app:icvp_max_page_scale="0.8"-->
+                    <!--app:icvp_medium_scaled="false"-->
+                    <!--app:icvp_min_page_scale="0.55"-->
+                    <!--app:icvp_min_page_scale_offset="5dp"-->
+                    <!--app:icvp_scroll_duration="250"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                    <!--app:layout_constraintRight_toRightOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
+                <ImageView
+                    android:id="@+id/carroussel_fotos_loja"
+                    android:layout_width="0dp"
+                    android:layout_height="300dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -50,14 +60,16 @@
                     android:id="@+id/titulo_anuncio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
                     android:textAlignment="center"
-                    android:textSize="24sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="36sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/carroussel_fotos" />
+                    app:layout_constraintTop_toBottomOf="@+id/carroussel_fotos_loja" />
 
                 <Button
                     android:id="@+id/button_ver_anuncio"
@@ -65,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/button_style"
+                    android:fontFamily="sans-serif-condensed"
                     android:paddingStart="58dp"
                     android:paddingLeft="58dp"
                     android:paddingEnd="58dp"
@@ -110,11 +123,10 @@
                             android:gravity="left|center_vertical"
                             android:text="@string/_0"
                             android:textAlignment="center"
-                            android:textColor="#000000"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="24sp" />
-
-
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -130,21 +142,37 @@
                             android:id="@+id/cont_comment"
                             android:layout_width="40dp"
                             android:layout_height="match_parent"
+                            android:text="@string/_0"
                             android:gravity="left|center_vertical"
                             android:textAlignment="center"
-                            android:textColor="#000000"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="24sp" />
                     </LinearLayout>
 
-
-
-
-                    <ImageButton
-                        android:id="@+id/compartilhar_anuncio"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="80dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_share" />
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/sharing_anuncio"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/ic_share" />
+
+                        <TextView
+                            android:id="@+id/cont_share"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center_vertical"
+                            android:text="@string/_0"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="24sp" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -162,7 +190,8 @@
             app:cardCornerRadius="7dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_foto">
+            app:layout_constraintTop_toBottomOf="@id/card_foto"
+            android:contentDescription="@string/main_card_client">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -170,33 +199,56 @@
 
                 <ImageView
                     android:id="@+id/image_location_anuncio"
-                    android:layout_width="42dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:src="@drawable/location_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:srcCompat="@drawable/ic_marker_icosvg"
+                    app:layout_constraintBottom_toBottomOf="@+id/anuncio_endereco"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/anuncio_endereco" />
+
+                <TextView
+                    android:id="@+id/anuncio_endereco"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:gravity="start|center_vertical|center_horizontal|start"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/image_location_anuncio"
+                    app:layout_constraintStart_toEndOf="@+id/image_location_anuncio"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/anuncio_endereco"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="261dp"
-                    android:layout_height="51dp"
+                    android:id="@+id/create_route"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical"
-                    android:text="Rua jurupis do exemplo, 336"
+                    android:background="@drawable/button_style"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingStart="58dp"
+                    android:paddingLeft="58dp"
+                    android:paddingEnd="58dp"
+                    android:paddingRight="58dp"
+                    android:text="@string/criar_rota"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/image_location_anuncio"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/anuncio_endereco" />
+
 
             </android.support.constraint.ConstraintLayout>
 
@@ -210,7 +262,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/denuncia_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/midias">
@@ -239,7 +290,9 @@
                         android:id="@+id/image_ramo_anuncio"
                         android:layout_width="42dp"
                         android:layout_height="39dp"
+                        android:layout_marginStart="12dp"
                         android:layout_marginLeft="12dp"
+                        android:contentDescription="@string/ramo_atividade"
                         android:src="@drawable/maleta"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -250,12 +303,11 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="259dp"
                         android:layout_height="38dp"
+                        android:layout_marginLeft="16dp"
                         android:gravity="left|center_horizontal|center"
                         android:text="Rua jurupis do exemplo, 336"
                         app:layout_constraintBottom_toBottomOf="@+id/image_ramo_anuncio"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/image_ramo_anuncio"
-                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/image_ramo_anuncio" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -280,32 +332,33 @@
 
             <ImageView
                 android:id="@+id/image_telefone"
-                android:layout_width="65dp"
-                android:layout_height="60dp"
-                android:layout_marginRight="20dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
                 android:padding="2dp"
                 app:srcCompat="@drawable/telefone" />
 
             <ImageView
                 android:id="@+id/image_whatsapp"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginRight="20dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
                 app:srcCompat="@drawable/whatsapp" />
 
             <ImageView
                 android:id="@+id/image_email"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginRight="20dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 app:srcCompat="@drawable/email" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="5dp"
-                android:src="@drawable/com_facebook_button_icon_blue" />
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView3"-->
+                <!--android:layout_width="60dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:padding="5dp"-->
+                <!--android:src="@drawable/com_facebook_button_icon_blue" />-->
 
         </LinearLayout>
 
@@ -313,12 +366,13 @@
         <Button
             android:id="@+id/denuncia_button"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="341dp"
+            android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
             android:background="@color/error"
             android:contentDescription="@string/botao_denunciar"
             android:gravity="center_vertical|center_horizontal"
@@ -331,9 +385,20 @@
             android:textStyle="normal|bold|italic"
             android:typeface="sans"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+            app:layout_constraintStart_toStartOf="@+id/constraintLayout" />
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recycler_anuncios"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:background="@color/cardview_light_background"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/denuncia_button" />-->
 
     </android.support.constraint.ConstraintLayout>
 

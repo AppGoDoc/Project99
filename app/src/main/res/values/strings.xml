@@ -2,31 +2,17 @@
     <string name="app_name">AppGo!</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
     <string name="appgo">AppGo!</string>
-    <string name="appgo_email">appgo.website@gmail.com</string>
-    <string name="map_type">Tipo_de_mapa</string>
-    <string name="string_login">LOGIN</string>
     <string name="string_esqueci_minha_senha"><u>Esqueceu sua senha?</u></string>
-    <string name="cadastrese">cadastre-se!</string>
     <string name="logo_image">logo_image</string>
     <string name="login">LOGIN</string>
     <string name="name">Nome</string>
     <string name="email">e-mail</string>
-    <string name="celular">celular</string>
-    <string name="empresa">empresa</string>
     <string name="ramo_atividade">Qual a sua atividade?</string>
     <string name="endereco">Endereço do anúncio</string>
-    <string name="salvar">Salvar Cadastro</string>
     <string name="frase_inicial">Tudo que você quer, precisa ou deseja, você encontra no AppGo!</string>
-    <string name="MAP_LOCATION_CLASS">maplocation.class</string>
     <!--Ação ligada ao valor de Latitude-->
-    <string name="LOCATION_LATITUDE">locationupdatelatitude</string>
-    <string name="LATITUDE">latitudevalue</string>
     <!--Ação ligada ao valor de Longitude-->
-    <string name="LOCATION_LONGITUDE">locationupdatelongitude</string>
-    <string name="LONGITUDE">longitudevalue</string>
-    <string name="msg_buscar">Buscar...</string>
     <string name="endereconaoencontrado">Não foi possível encontrar o endereço solicitado, tente novamente.</string>
 
     <string-array name="service_types">
@@ -69,71 +55,102 @@
         <item>Veterinários e PetShops</item>
     </string-array>
     <string name="title_activity_search_on_map">MapSearch</string>
-    <string name="endereco_anunciante">Localização do Anúncio</string>
-    <string name="cpf">CPF (Sem pontos ou traços)</string>
-    <string name="digiteseuemail">Digite seu e-mail</string>
-    <string name="redefinicaodesenha">Redefinição de senha</string>
-    <string name="enviaremail">Enviar e-mail</string>
-    <string name="envieumemail">Envie um e-mail para redefinir a sua senha.</string>
-    <string name="confirmeemail">Confirme seu e-mail</string>
     <string name="digitesuasenha">Digite sua senha(Pelo menos 6 dígitos)</string>
     <string name="confirmesuasenha">Confirme sua senha</string>
     <string name="dadospessoais">Dados pessoais</string>
-    <string name="ramo">Ramo de atividade</string>
-    <string name="alterarsenha">Alterar Senha</string>
     <string name="cancelar">Cancelar</string>
-    <string name="salv">Salvar</string>
-    <string name="meu_cadastro">Meu Cadastro</string>
-    <string name="definir_local">Minha Localização</string>
-    <string name="meus_dados">Meus Dados</string>
-    <string name="anuncio_premium">Anúncio Premium</string>
     <string name="sair">Sair</string>
     <string name="alterarmarcador">Se for preciso, clique segure e arraste o marcador para ajustar sua localização</string>
     <string name="cpf_text">CPF</string>
     <string name="content_description_userphoto">userphoto</string>
     <string name="confirm_logout">Deseja realizar Logout?</string>
-    <string name="crie_seu_anuncio">Crie seu anúncio</string>
     <string name="cnpj">CNPJ</string>
     <string name="buscar_endereco">Buscar endereço</string>
     <string name="whatssapp_number">Whatsapp (Telefone)</string>
     <string name="telefone_comercial">Telefone Comercial</string>
     <string name="email_comercial">e-mail (Comercial)</string>
     <string name="documento">Documento</string>
-    <string name="deseja_alterar_endereco">Alterar o nome do endereço?</string>
     <string name="observacao_endereco">Acrescentar referência ao endereço</string>
-    <string name="salvarendereco">Salvar Endereço</string>
-    <string name="escolha_seu_icone">Escolha seu icone (Clique no logo))</string>
-    <string name="clique_lojinha">Clique na lojinha e escolha seu icone</string>
+    <string name="clique_lojinha">Clique no ícone e insira seu logotipo</string>
     <string name="todo">TODO</string>
-    <string name="escolha_fotos_anuncio">Escolha fotos para seu anúncio!</string>
+    <string name="escolha_fotos_anuncio">Escolha uma foto para sua página no App Go!</string>
     <string name="salvar_anuncio">Salvar Anúncio</string>
-    <string name="ver_anuncio">VER ANÚNCIO</string>
     <string name="_0">0</string>
-    <string name="facebook_application_id" translatable="false">214875735742767</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb214875735742767</string>
     <string name="facebook_app_id">214875735742767</string>
     <string name="fb_login_protocol_scheme">fb214875735742767</string>
     <string name="publicar">Publicar</string>
     <string name="botao_denunciar">Botão para denunciar abuso de anunciante</string>
-    <string name="tipo_de_transporte">Tipo de Transporte</string>
     <string name="title_activity_postar_anuncio">+ Inserir Anuncio</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="button">Button</string>
-    <string name="foto">Foto</string>
-    <string name="video">Video</string>
-    <string name="seja_premium">Seja Premium</string>
-    <string name="salvar_postagem">Salvar Postagem</string>
+    <string name="seja_premium">Premium</string>
+    <string name="salvar_postagem">Salvar</string>
     <string name="login_com_facebook">Login Com Facebook</string>
-    <string name="icone_do_aplicativo">icone do aplicativo</string>
     <string name="login_com_e_mail">Login Com e-mail</string>
     <string name="imagem_do_comentarista">Imagem do comentarista</string>
-    <string name="foto_anuncio">Foto foto</string>
-    <string name="video_anuncio">Video Anuncio</string>
-
-    <!--&lt;!&ndash;Api Id Server Web&ndash;&gt;-->
+    <string name="foto_anuncio">Foto</string>
+    <string name="video_anuncio">Video</string>
+    <string name="nome_loja_anuncio">Nome da loja ou do anúncio.</string>
+    <string name="filtrar_titulo">Filtrar Anúncios</string>
+    <string name="filtrar">Filtrar</string>
+    <string name="tipo_ramo">Escolha o ramo de atividade</string>
+    <string name="info_filtrar">Selecione o ramo de atividade do comércio e a distância máxima para filtrar os resultados da busca no mapa.</string>
+    <string name="filtrar_busca">Filtrar Busca</string>
+    <string name="compartilhe">Compartilhe</string>
+    <string name="configura_o">Configuração</string>
+    <string name="criar_anuncio">Criar Postagem</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="login_appgo">Login</string>
+    <string name="reset">Reset</string>
+    <string name="selecione_o_tipo_de_rota">Selecione o tipo de Rota...</string>
+    <string name="caminhando">Caminhando</string>
+    <string name="bicicleta">Bicicleta</string>
+    <string name="tranporte_p_blico">Tranporte público</string>
+    <string name="carro">Carro</string>
+    <string name="ajuda">Ajuda?</string>
+    <string name="registrar">Registrar-se</string>
+    <string name="title_activity_create_edit_anuncio_foto">Anuncio fotográfico</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="icon_image_example">Imagen para exemplo do icone</string>
+    <string name="escolha_tam_icones">Selecione o tamanho padrão para os ícones do mapa</string>
+    <string name="_1km">1km</string>
+    <string name="selecione_idioma">Selecione o idioma padrão</string>
+    <string name="idioma_selecione">Selecione_idioma</string>
+    <string name="salvar_opcoes">Salvar Opções</string>
+    <string name="pt_br">Português Brasileiro</string>
+    <string name="pt_pg">Português de Portugal</string>
+    <string name="en_us">Inglês</string>
+    <string name="es_ep">Espanhol</string>
+    <string name="escolher_foto">selecionar foto</string>
+    <string name="excluir_fotos">Excluir foto</string>
+    <string name="digite_seu_e_mail">Digite seu e-mail para recuperar sua senha:</string>
+    <string name="enviar_email">Enviar e-mail</string>
+    <string name="exemplo_exemplo_com">exemplo@exemplo.com</string>
+    <string name="alterar_informa">Alterar informações do Usuário</string>
+    <string name="editar_usuario">Salvar</string>
+    <string name="deseja_apagar_este_an_ncio">Deseja apagar este anúncio?</string>
+    <string name="alerta_apagar">Anúncios apagados não podem ser recuperados, tenha certeza antes de apagar suas fotos.</string>
+    <string name="criar_rota">Criar Rota</string>
+    <string name="salvar">salvar</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="sair_do_tutorial">sair do tutorial</string>
+    <string name="iniciar_appgo">Iniciar Appgo</string>
+    <string name="perfil_da_loja">Perfil da Loja</string>
+    <string name="login_com_google">LOGIN CONTA GOOGLE</string>
+    <string name="encerrar_o_perfil_da_minha_loja">Encerrar o Perfil da minha loja</string>
+    <string name="antes_de_encerrar">Atenção, antes de encerrar o perfil da sua loja você precisa apagar todos os seus anúncios.\nPerfis apagados não podem ser recuperados.</string>
+    <string name="excluir_loja">EXCLUIR LOJA</string>
+    <string name="main_card_client">Main Card Client</string>
+    <string name="filtrar_busca_captive">FILTRAR BUSCA</string>
+    <string name="crie_uma_leganda_para_o_seu_video">Crie uma leganda para o seu video...</string>
+    <!--Api Id Server Web-->
     <!--<string name="default_web_client_id" templateMergeStrategy="preserve" translatable="false">-->
-        <!--529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com-->
+    <!--529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com-->
     <!--</string>-->
 </resources>

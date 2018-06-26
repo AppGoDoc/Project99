@@ -4,7 +4,7 @@
     android:id="@+id/coment_layer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="left">
+    android:layout_gravity="start">
 
     <ImageView
         android:id="@+id/user_image"
@@ -35,5 +35,6 @@
         android:layout_marginBottom="15dp"
         android:layout_toEndOf="@+id/user_image"
         android:layout_toRightOf="@+id/user_image"
-        android:ems="10" />
+        android:ems="10"
+        android:textColor="@android:color/background_dark" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -47,9 +48,12 @@ public class ConfirmLogout extends DialogFragment implements View.OnClickListene
                 getActivity().getFragmentManager().popBackStack();
                 break;
             case R.id.btn_ok:
-                auth.signOut();
+                FirebaseAuth.getInstance().signOut();
                 getActivity().getFragmentManager().popBackStack();
                 dismiss();
+                Intent it = new Intent(getActivity(), SplashScreen.class);
+                startActivity(it);
+                getActivity().finish();
                 break;
         }
     }

@@ -1,61 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_carregando"
+    android:orientation="vertical"
+    android:padding="18dp">
 
-    <android.support.v7.widget.CardView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:fontFamily="cursive"
+        android:text="@string/selecione_o_tipo_de_rota"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp" />
+
+    <LinearLayout
         android:id="@+id/card_ape"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
+            android:layout_width="@dimen/size_icon_route_select"
+            android:layout_height="@dimen/size_icon_route_select"
+            android:padding="@dimen/padding_icon_route_select"
+            app:srcCompat="@drawable/ic_walk" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/andar_imagem" />
+            android:layout_marginStart="@dimen/margin_text_icon_route_select"
+            android:layout_marginLeft="@dimen/margin_text_icon_route_select"
+            android:layout_marginEnd="@dimen/margin_text_icon_route_select"
+            android:layout_marginRight="@dimen/margin_text_icon_route_select"
+            android:fontFamily="cursive"
+            android:gravity="start|center_vertical"
+            android:text="@string/caminhando"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+    </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/card_bike"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintLeft_toRightOf="@+id/card_ape"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
+            android:layout_width="@dimen/size_icon_route_select"
+            android:layout_height="@dimen/size_icon_route_select"
+            android:padding="@dimen/padding_icon_route_select"
+            app:srcCompat="@drawable/ic_bycicle" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/bicicleta_imagem" />
+            android:layout_marginStart="@dimen/margin_text_icon_route_select"
+            android:layout_marginLeft="@dimen/margin_text_icon_route_select"
+            android:layout_marginEnd="@dimen/margin_text_icon_route_select"
+            android:layout_marginRight="@dimen/margin_text_icon_route_select"
+            android:fontFamily="cursive"
+            android:gravity="start|center_vertical"
+            android:text="@string/bicicleta"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24dp" />
+    </LinearLayout>
 
-
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/card_bus"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintTop_toBottomOf="@+id/card_ape">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <ImageView
+            android:layout_width="@dimen/size_icon_route_select"
+            android:layout_height="@dimen/size_icon_route_select"
+            android:padding="@dimen/padding_icon_route_select"
+            app:srcCompat="@drawable/ic_bus" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/onibus_imagem"/>
+            android:layout_marginStart="@dimen/margin_text_icon_route_select"
+            android:layout_marginLeft="@dimen/margin_text_icon_route_select"
+            android:layout_marginEnd="@dimen/margin_text_icon_route_select"
+            android:layout_marginRight="@dimen/margin_text_icon_route_select"
+            android:fontFamily="cursive"
+            android:gravity="start|center_vertical"
+            android:text="@string/tranporte_p_blico"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+    </LinearLayout>
 
-
-
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/card_car"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintTop_toBottomOf="@+id/card_ape"
-        app:layout_constraintLeft_toRightOf="@id/card_bus">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <ImageView
+            android:layout_width="@dimen/size_icon_route_select"
+            android:layout_height="@dimen/size_icon_route_select"
+            android:padding="@dimen/padding_icon_route_select"
+            app:srcCompat="@drawable/ic_car" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/carro_imagem"/>
+            android:layout_marginStart="@dimen/margin_text_icon_route_select"
+            android:layout_marginLeft="@dimen/margin_text_icon_route_select"
+            android:layout_marginEnd="@dimen/margin_text_icon_route_select"
+            android:layout_marginRight="@dimen/margin_text_icon_route_select"
+            android:fontFamily="cursive"
+            android:gravity="start|center_vertical"
+            android:text="@string/carro"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+    </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-</android.support.constraint.ConstraintLayout>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/card_train"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="@dimen/size_icon_route_select"-->
+    <!--android:layout_height="@dimen/size_icon_route_select"-->
+    <!--android:padding="@dimen/padding_icon_route_select"-->
+    <!--app:srcCompat="@drawable/ic_metro" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginStart="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginLeft="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginEnd="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginRight="@dimen/margin_text_icon_route_select"-->
+    <!--android:fontFamily="cursive"-->
+    <!--android:gravity="start|center_vertical|"-->
+    <!--android:text="Trens Urbanos"-->
+    <!--android:textColor="@color/colorPrimaryDark"-->
+    <!--android:textSize="24dp" />-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/card_boat"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="@dimen/size_icon_route_select"-->
+    <!--android:layout_height="@dimen/size_icon_route_select"-->
+    <!--android:padding="@dimen/padding_icon_route_select"-->
+    <!--app:srcCompat="@drawable/ic_boat" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginStart="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginLeft="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginEnd="@dimen/margin_text_icon_route_select"-->
+    <!--android:layout_marginRight="@dimen/margin_text_icon_route_select"-->
+    <!--android:fontFamily="cursive"-->
+    <!--android:gravity="start|center_vertical|"-->
+    <!--android:text="Transporte Máritimo"-->
+    <!--android:textColor="@color/colorPrimaryDark"-->
+    <!--android:textSize="24dp" />-->
+    <!--</LinearLayout>-->
+
+</LinearLayout>

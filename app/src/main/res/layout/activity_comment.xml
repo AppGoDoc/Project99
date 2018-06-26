@@ -2,46 +2,52 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/edit_comment"
-        android:layout_width="231dp"
+        android:layout_width="219dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textMultiLine"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@android:color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_publicar"
         app:layout_constraintStart_toEndOf="@+id/image_user" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/image_user"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:civ_border_color="@color/gray_300"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="@id/edit_comment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edit_comment"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+        app:layout_constraintTop_toTopOf="@+id/edit_comment" />
 
     <Button
         android:id="@+id/btn_publicar"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/publicar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/edit_comment"
-        app:layout_constraintTop_toTopOf="@+id/edit_comment" />
+        app:layout_constraintTop_toTopOf="@+id/edit_comment"
+        app:layout_constraintVertical_bias="0.666" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_comments"

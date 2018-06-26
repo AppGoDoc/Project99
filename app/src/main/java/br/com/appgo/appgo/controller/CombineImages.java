@@ -27,4 +27,17 @@ public class CombineImages {
         comboImage.drawBitmap(bitmap1, 15.0f, 12.5f, null);
         return cs;
     }
+    public Bitmap createMarkeAppGo(Bitmap bitmap1){
+        Bitmap bitMoldura = BitmapFactory.decodeResource(
+                context.getResources(),
+                R.drawable.logo_appgo);
+        Bitmap cs = Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas comboImage = new Canvas(cs);
+        comboImage.drawBitmap(bitmap1, 0.0f, 0.0f, null);
+        comboImage.drawBitmap(
+                Bitmap.createScaledBitmap(bitMoldura,
+                        (int)(bitmap1.getWidth()*0.2), (int)(bitmap1.getWidth()*0.2), true),
+                4.0f, 4.0f, null);
+        return cs;
+    }
 }

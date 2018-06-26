@@ -7,18 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Address;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -30,15 +30,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
-import br.com.appgo.appgo.maps.MapLocation;
+
+import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.fragment.AdressNotFind;
 import br.com.appgo.appgo.fragment.ConfirmLocationFragment;
+import br.com.appgo.appgo.maps.MapLocation;
 import br.com.appgo.appgo.model.User;
-import br.com.appgo.appgo.R;
 import br.com.appgo.appgo.services.FindAddress;
+
 import static br.com.appgo.appgo.view.CriarAnuncioActivity.ADRESS_LATITUDE;
 import static br.com.appgo.appgo.view.CriarAnuncioActivity.ADRESS_LONGITUDE;
 import static br.com.appgo.appgo.view.CriarAnuncioActivity.ADRESS_NAME;
@@ -56,13 +60,13 @@ public class SearchOnMapActivity extends FragmentActivity
     private GoogleApiClient mGoogleApiClient;
     private ProgressBar progressBar;
     private EditText addressName, addressObs;
-    private ImageButton button;
     private FindAddress findAddress;
     private List<Address> addressList = null;
     private Marker marker;
-    private FloatingActionButton buttonConfirm;
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ auth.getCurrentUser().getUid());
+    private FloatingActionButton buttonConfirm, button;
+    FirebaseAuth auth;
+    FirebaseUser firebaseUser;
+    DatabaseReference userReference;
     User user = new User();
 
     @Override
@@ -70,12 +74,15 @@ public class SearchOnMapActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_on_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        userReference = FirebaseDatabase.getInstance().getReference("Anunciantes/"+ firebaseUser.getUid());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         addressName = (EditText) findViewById(R.id.edtTextAdress);
         addressObs = (EditText) findViewById(R.id.edtTextAdressObs);
-        button = (ImageButton) findViewById(R.id.button2);
+        button = (FloatingActionButton) findViewById(R.id.button2);
         buttonConfirm = (FloatingActionButton)findViewById(R.id.float_button_confirm);
         buttonConfirm.setEnabled(false);
         buttonConfirm.setVisibility(View.GONE);
@@ -99,14 +106,28 @@ public class SearchOnMapActivity extends FragmentActivity
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng latLng = marker.getPosition();
-                Intent intent = new Intent();
-                intent.putExtra(ADRESS_LATITUDE, latLng.latitude);
-                intent.putExtra(ADRESS_LONGITUDE, latLng.longitude);
-                intent.putExtra(ADRESS_NAME, addressName.getText().toString());
-                intent.putExtra(ADRESS_OBS, addressObs.getText().toString());
-                setResult(RESULT_FIND_ADDRESS, intent);
-                finish();
+                try{
+                    buttonConfirm.setEnabled(false);
+                    buttonConfirm.setVisibility(View.GONE);
+                    if (marker.getPosition()!=null){
+                        LatLng latLng = marker.getPosition();
+                        Intent intent = new Intent();
+                        intent.putExtra(ADRESS_LATITUDE, latLng.latitude);
+                        intent.putExtra(ADRESS_LONGITUDE, latLng.longitude);
+                        intent.putExtra(ADRESS_NAME, addressName.getText().toString());
+                        intent.putExtra(ADRESS_OBS, addressObs.getText().toString());
+                        setResult(RESULT_FIND_ADDRESS, intent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(SearchOnMapActivity.this, "Endereço inválido, tente novamente inserindo" +
+                                " um endereço válido.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }

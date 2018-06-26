@@ -26,44 +26,42 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="36dp"
         android:contentDescription="@string/logo_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_go" />
+        app:srcCompat="@drawable/logo_go_sombra" />
 
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/google_signin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:drawableLeft="@android:drawable/ic_dialog_email"
-        android:drawableStart="@android:drawable/ic_dialog_email"
-        android:text="Login Com Conta Google"
+        android:gravity="center_vertical|center_horizontal|center|clip_horizontal"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_title_color"
         app:layout_constraintBottom_toTopOf="@+id/login_facebook"
         app:layout_constraintEnd_toEndOf="@+id/login_facebook"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/login_facebook" />
+
     <Button
+        android:id="@+id/email_login"
+        style="@android:style/Widget.DeviceDefault.Button.Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@color/black"
+        android:layout_marginBottom="22dp"
+        android:drawableLeft="@drawable/ic_email"
+        android:gravity="left|center_vertical|center_horizontal|start"
+        android:textAlignment="center"
         android:text="@string/login_com_e_mail"
-        android:textColor="@color/white"
-        android:paddingStart="8dp"
-        android:paddingLeft="8dp"
-        android:paddingEnd="8dp"
-        android:paddingRight="8dp"
-        android:drawableLeft="@android:drawable/ic_dialog_email"
-        android:drawableStart="@android:drawable/ic_dialog_email"
-        app:layout_constraintBottom_toTopOf="@id/google_signin"
-        app:layout_constraintLeft_toLeftOf="@id/google_signin"
-        app:layout_constraintStart_toStartOf="@id/google_signin"
-        app:layout_constraintRight_toRightOf="@id/google_signin"
-        app:layout_constraintEnd_toEndOf="@id/google_signin" />
+        android:textColor="@color/browser_actions_title_color"
+        app:layout_constraintBottom_toTopOf="@+id/google_signin"
+        app:layout_constraintEnd_toEndOf="@+id/google_signin"
+        app:layout_constraintStart_toStartOf="@+id/google_signin" />
 
 </android.support.constraint.ConstraintLayout>

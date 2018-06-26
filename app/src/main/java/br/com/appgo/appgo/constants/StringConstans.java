@@ -19,4 +19,7 @@ public class StringConstans {
     public final static String VER_ANUNCIO = "Ver Anúncio";
     public final static String CRIAR_ANUNCIO = "+ Criar Anúncio";
     public final static String FIREBASE_OBJECT = "object_firebase";
+    public final static String STORAGE_REFERENCE = "gs://appgo-1517155420414.appspot.com/";
+    public final static int NUMERO_MAX_ANUNCIOS_FOTOS = 7;
+    public final static String YOUR_ADMOB_APP_ID = "ca-app-pub-6356607807177191~1103875526";
 }
