@@ -54,7 +54,7 @@ public class AnuncioFotoAdapter extends PagerAdapter {
         ImageView imageAnuncer = view.findViewById(R.id.image_anuncer);
         photoPicasso.Photo2(urlPhotoAnnuncer, imageAnuncer, 100, 100, true);
         photoPicasso.Photo2(fotos.get(position).urlFoto, imageView, 500, 700, true);
-        TextView textView = view.findViewById(R.id.text_desc);
+        TextView textView = view.findViewById(R.id.text_advise);
         textView.setText(fotos.get(position).descrFoto);
         TextView textView1 = view.findViewById(R.id.text_adviser);
         textView1.setText(adviserName);

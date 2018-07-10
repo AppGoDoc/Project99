@@ -40,7 +40,6 @@ import br.com.appgo.appgo.model.Foto;
 import br.com.appgo.appgo.model.Loja;
 import br.com.appgo.appgo.services.LoadAnunciosData;
 
-import static br.com.appgo.appgo.constants.StringConstans.NUMERO_MAX_ANUNCIOS_FOTOS;
 import static br.com.appgo.appgo.services.LoadAnunciosData.LOJA_RECEIVE_DATA;
 import static br.com.appgo.appgo.services.LoadAnunciosData.RECEIVER_DATA_ANUNCIO;
 import static br.com.appgo.appgo.view.CriarAnuncioActivity.ANUNCIOS;
@@ -100,24 +99,24 @@ public class PostarActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_foto:
-                if (loja.AnuncioFotografico.size() <= NUMERO_MAX_ANUNCIOS_FOTOS){
+//                if (loja.AnuncioFotografico.size() <= NUMERO_MAX_ANUNCIOS_FOTOS){
                     Intent intent = new Intent(getApplicationContext(), CriarAnuncioFoto.class);
                     intent.setAction(USER_LOJA_ACTION_TO_POST);
                     byte[] data = SerializationUtils.serialize(loja);
                     intent.putExtra(USER_LOJA_TO_POST, data);
                     startActivityForResult(intent, REQUEST_FOTO_ANUNCIO);
-                }
-                else {
-                    Toast.makeText(PostarActivity.this,
-                            "Você atingiu o número máximo de anúncios.", Toast.LENGTH_SHORT).show();
-                }
+//                }
+//                else {
+//                    Toast.makeText(PostarActivity.this,
+//                            "Você atingiu o número máximo de anúncios.", Toast.LENGTH_SHORT).show();
+//                }
                 break;
             case R.id.btn_video:
-                Intent intent = new Intent(getApplicationContext(), CriarAnuncioVideo.class);
-                intent.setAction(USER_LOJA_ACTION_TO_POST);
-                byte[] data = SerializationUtils.serialize(loja);
-                intent.putExtra(USER_LOJA_TO_POST, data);
-                startActivityForResult(intent, REQUEST_VIDEO_ANUNCIO);
+                Intent intentVideo = new Intent(getApplicationContext(), CriarAnuncioVideo.class);
+                intentVideo.setAction(USER_LOJA_ACTION_TO_POST);
+                byte[] dataVideo = SerializationUtils.serialize(loja);
+                intentVideo.putExtra(USER_LOJA_TO_POST, dataVideo);
+                startActivityForResult(intentVideo, REQUEST_VIDEO_ANUNCIO);
                 break;
             case R.id.btn_premium:
 

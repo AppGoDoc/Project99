@@ -131,6 +131,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
+
                         <ImageButton
                             android:id="@+id/comentar_anuncio"
                             style="@style/Widget.AppCompat.Button.Borderless"
@@ -172,8 +173,6 @@
                             android:textSize="24sp" />
 
                     </LinearLayout>
-
-
                 </LinearLayout>
 
             </android.support.constraint.ConstraintLayout>

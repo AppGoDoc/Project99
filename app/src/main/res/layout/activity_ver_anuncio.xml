@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="12dp"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_anuncios"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cardview_light_background" />
-</RelativeLayout>
+        android:layout_height="0dp"
+        android:layout_below="@+id/toolbar5"
+        android:background="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar5" />
+
+    <ImageButton
+        android:id="@+id/btn_email"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/ic_email"
+        android:elevation="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar5" />
+
+    <ImageButton
+        android:id="@+id/btn_phone"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:background="@drawable/telefone"
+        android:elevation="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_email"
+        app:layout_constraintEnd_toStartOf="@+id/btn_email"
+        app:layout_constraintTop_toTopOf="@+id/btn_email" />
+
+    <ImageButton
+        android:id="@+id/btn_whatsapp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="-4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/whatsapp"
+        android:elevation="14dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_phone"
+        app:layout_constraintTop_toTopOf="@+id/btn_phone" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_anuncios"
+        app:layout_constraintStart_toStartOf="@+id/toolbar5"
+        app:layout_constraintTop_toTopOf="@+id/toolbar5"
+        app:srcCompat="@drawable/logo_azul_sombra" />
+
+</android.support.constraint.ConstraintLayout>

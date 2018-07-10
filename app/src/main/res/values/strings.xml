@@ -149,6 +149,9 @@
     <string name="main_card_client">Main Card Client</string>
     <string name="filtrar_busca_captive">FILTRAR BUSCA</string>
     <string name="crie_uma_leganda_para_o_seu_video">Crie uma leganda para o seu video...</string>
+    <string name="compartilhar">compartilhar</string>
+    <string name="comentar">comentar</string>
+    <string name="curtir">  curtir</string>
     <!--Api Id Server Web-->
     <!--<string name="default_web_client_id" templateMergeStrategy="preserve" translatable="false">-->
     <!--529269687384-33a9piij77bui6k3qssgr1pfhrcth7og.apps.googleusercontent.com-->

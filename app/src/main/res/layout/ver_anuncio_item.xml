@@ -27,7 +27,7 @@
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
         android:background="@android:color/background_light"
-        android:fontFamily="@font/anton"
+        android:fontFamily="sans-serif"
         android:textColor="@color/browser_actions_text_color"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -37,12 +37,12 @@
         app:layout_constraintTop_toBottomOf="@id/img_anuncio" />
 
     <TextView
-        android:id="@+id/text_desc"
+        android:id="@+id/text_advise"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@android:color/background_light"
-        android:fontFamily="@font/anton"
+        android:fontFamily="sans-serif"
         android:textColor="@color/browser_actions_text_color"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/text_adviser"
